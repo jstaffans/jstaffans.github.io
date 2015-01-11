@@ -1,0 +1,30 @@
+---
+# Let's add a comment to make this file sass-y.
+# Change this file for any custom CSS.
+---
+
+.main-nav {
+  padding: 47px;
+}
+
+/* We need to add display:inline in order to align the '>>' of the 'read more' link */
+.post-excerpt p {
+	display:inline;
+}
+
+.main-nav h2 {
+  margin-top: -6px;
+  display: inline-block;
+}
+
+@media only screen and (max-width: 500px) {
+  .main-nav a {
+    display: none;
+  }
+
+}
+  
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+	"syntax"
+;

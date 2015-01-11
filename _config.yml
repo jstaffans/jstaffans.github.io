@@ -1,0 +1,13 @@
+name: Johannes' Tech Blog
+meta_description: "A blog focused on technology, software development and consulting."
+
+markdown: redcarpet
+highlighter: pygments
+logo: false
+paginate: 15
+baseurl: /
+domain_name: 'https://jstaffans.github.io'
+
+# Details for the RSS feed generator
+url:            'https://jstaffans.github.io'
+author:         'Johannes Staffans'

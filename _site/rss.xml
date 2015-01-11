@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+  xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+  <channel>
+    <title>Johannes' Tech Blog</title>
+    <link>https://jstaffans.github.io</link>
+    <description>RSS feed for Johannes' Tech Blog</description>
+    <pubDate>Sun, 11 Jan 2015 00:00:00 +0100</pubDate>
+    <item>
+      <title>A new blog is born</title>
+      <link>https://jstaffans.github.io/blog/2015/01/11/clojure-in-java-projects.html</link>
+      <description>&lt;p&gt;It is time for a new blog. My experiences over the last few years have changed the way I develop software a lot and I feel the need to reflect on that. 
+I am also now more focused on the technological side of software development as opposed to working as an agile coach and scrum master, which was what
+a large part of the posts on my previous blog were about. &lt;/p&gt;
+</description>
+      <pubDate>Sun, 11 Jan 2015 00:00:00 +0100</pubDate>
+      <dc:date>2015-01-11T00:00:00+01:00</dc:date>
+    </item>
+    <dc:date>2015-01-11T00:00:00+01:00</dc:date>
+  </channel>
+</rss>
