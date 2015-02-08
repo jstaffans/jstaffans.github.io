@@ -11,8 +11,8 @@ So we agree that a Component-based approach is good. Where do we start? I had a 
 
 I had heard about James Reeves' [duct](https://github.com/weavejester/duct) library a few weeks prior and it turned 
 out to be exactly what I had been looking for. The duct library comes with a Leiningen plugin that generates a 
-simple project that is very easy to build on. The integration with Compojure is elegantly handled by wrapping
-Compojure routes in *endpoints*. Here's how the library author defines an endpoint:
+simple Component-based project that is very easy to build on. The integration with Compojure is elegantly 
+handled by wrapping Compojure routes in *endpoints*. Here's how the library author defines an endpoint:
 
 > Endpoints should resemble microservices, grouping routes by purpose. 
 > An endpoint might handle user authentication, or handle comments on a post. 
