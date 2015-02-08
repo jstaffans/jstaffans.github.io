@@ -48,6 +48,6 @@ of handling background tasks, such as firing web requests using the callback API
 [http-kit](http://www.http-kit.org/). Now I can see that the perhaps most useful case for core.async 
 is exactly this: communication between different parts of a system. 
 
-The whole thing is deployable using Docker - more information on that in the [README](https://github.com/jstaffans/pay-me). The source code is [available on GitHub](https://github.com/jstaffans/pay-me).
+The whole thing is deployable using Docker - more information on that in the [README](https://github.com/jstaffans/pay-me#deployment). The source code is [available on GitHub](https://github.com/jstaffans/pay-me).
 
 
