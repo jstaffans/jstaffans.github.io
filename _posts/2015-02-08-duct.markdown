@@ -7,7 +7,7 @@ categories: Blog
 
 I have been meaning to try building a simple web application using Stuart Sierra's [Component](https://github.com/stuartsierra/component) library for a while now. If you haven't heard about it, it's definitely worth having a look at - it is a lovely way of organising the different components that go into an application and gives you a smooth workflow in the REPL.
 
-So we agree that a Component-based approach is good. Where do we start? I had a run-of-the-mill web application based on Ring/Compojure in mind, but at least for me it was not at all evident how to marry a Compojure-based architecture with the Component pattern. The few examples I found seem a bit [contrived](https://gist.github.com/Deraen/9d65f447593859dd07ae). I felt I wanted something more concrete to build on, preferrably a template of some sort.
+So we agree that a Component-based approach is good. Where do we start? I had a run-of-the-mill web application based on Ring/Compojure in mind, but at least for me it was not at all evident how to marry a Compojure-based architecture with the Component pattern. The few examples I found seemed a bit [contrived](https://gist.github.com/Deraen/9d65f447593859dd07ae). I felt I wanted something more concrete to build on, preferrably a template of some sort.
 
 I had heard about James Reeves' [duct](https://github.com/weavejester/duct) library a few weeks prior and it turned 
 out to be exactly what I had been looking for. The duct library comes with a Leiningen plugin that generates a 
@@ -33,6 +33,10 @@ So the user enters a credit card number, which is verified by a phony verificati
 endpoint provides a secure token with which further transactions can be performed. A payment processing component
 handles interaction with an imaginary third-party service provider and a reporting component keeps track of 
 all transactions. The imaginary third-party payment service provider is notoriously unreliable, so about half the time, the transaction will time out.
+
+Note that the credit card number verification and the payment transaction processing would in the
+real world be handled by the *same* third party provider - I'm just faking things here, providing
+the token on my own.
 
 There's a tiny ClojureScript frontend that handles the AJAX request to get the token and print out 
 a list of transactions on the payment confirmation page.
