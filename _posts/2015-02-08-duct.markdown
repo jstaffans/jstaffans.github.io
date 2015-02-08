@@ -38,7 +38,7 @@ Note that the credit card number verification and the payment transaction proces
 real world be handled by the *same* third party provider - I'm just faking things here, providing
 the token on my own.
 
-There's a tiny ClojureScript frontend that handles the AJAX request to get the token and print out 
+There's a tiny ClojureScript frontend that handles the AJAX request to get the token and prints out 
 a list of transactions on the payment confirmation page.
 
 Communication between components is handled using core.async channels. As a side note, I can say
