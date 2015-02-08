@@ -1,0 +1,49 @@
+---
+layout: post
+title:  "Taking duct for a spin"
+date:   2015-02-08
+categories: Blog
+---
+
+I have been meaning to try building a simple web application using Stuart Sierra's [Component](https://github.com/stuartsierra/component) library for a while now. If you haven't heard about it, it's definitely worth having a look at - it is a lovely way of organising the different components that go into an application and gives you a smooth workflow in the REPL.
+
+So we agree that a Component-based approach is good. Where do we start? I had a run-of-the-mill web application based on Ring/Compojure in mind, but at least for me it was not at all evident how to marry a Compojure-based architecture with the Component pattern. The few examples I found seem a bit [contrived](https://gist.github.com/Deraen/9d65f447593859dd07ae). I felt I wanted something more concrete to build on, preferrably a template of some sort.
+
+I had heard about James Reeves' [duct](https://github.com/weavejester/duct) library a few weeks prior and it turned 
+out to be exactly what I had been looking for. The duct library comes with a Leiningen plugin that generates a 
+simple project that is very easy to build on. The integration with Compojure is elegantly handled by wrapping
+Compojure routes in *endpoints*. Here's how the library author defines an endpoint:
+
+> Endpoints should resemble microservices, grouping routes by purpose. 
+> An endpoint might handle user authentication, or handle comments on a post. 
+> Strive to keep your endpoints small and focused.
+
+Besides the endpoint solution, duct provides some other useful things, such as sensible handling
+of application configuration parameters through environment variables. I love not having to set
+those things up myself.
+
+## The application
+
+For my toy project, I decided to implement a simple payment service. The basic interactions can be seen 
+in the following diagram (yellow boxes represent endpoint components, green boxes are background service components):
+
+![interaction diagram](/assets/images/pay-me.png)
+
+So the user enters a credit card number, which is verified by a phony verification endpoint. The verification
+endpoint provides a secure token with which further transactions can be performed. A payment processing component
+handles interaction with an imaginary third-party service provider and a reporting component keeps track of 
+all transactions. The imaginary third-party payment service provider is notoriously unreliable, so about half the time, the transaction will time out.
+
+There's a tiny ClojureScript frontend that handles the AJAX request to get the token and print out 
+a list of transactions on the payment confirmation page.
+
+Communication between components is handled using core.async channels. As a side note, I can say
+that implementing this web application proved a very useful excercise in understanding core.async 
+channels as a means of communication between components. I had earlier mainly seen them as a way 
+of handling background tasks, such as firing web requests using the callback API of 
+[http-kit](http://www.http-kit.org/). Now I can see that the perhaps most useful case for core.async 
+is exactly this: communication between different parts of a system. 
+
+The whole thing is deployable using Docker - more information on that in the [README](https://github.com/jstaffans/pay-me). The source code is [available on GitHub](https://github.com/jstaffans/pay-me).
+
+
