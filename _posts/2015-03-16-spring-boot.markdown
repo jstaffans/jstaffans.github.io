@@ -10,7 +10,7 @@ that shows up whenever our mobile apps are opened, have been implemented in this
 dedicated services, one example being our routing engine.  
 
 The microservices we have are so far strictly backend-related - our web client is for example still a monolithic thing, albeit a much more modern one these days. 
-Whenever we are implementing web-facing features we need to write code in two places - for the service containing the backend logic (probably in Java, Python or Clojure)  
+Whenever we are implementing web-facing features we need to write code in two places - for the service containing the backend logic (probably in Java, Python or Clojure)
 and as part of the web UI, which is written in JavaScript using the [React.js library](http://facebook.github.io/react/).
 
 The fact that you have to juggle two wildly different environments to do full-stack development can be a pain point. For features that require only simple UI elements
