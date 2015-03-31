@@ -40,7 +40,7 @@ When developing the Clojure-based payment application, I made good use of core.a
 the reporting subsystem and the payment processing component - the separation of behavior and data and event-based approach that core.async brings 
 is a big win in my opinion. When looking for something similar for use in a Java project, I finally landed by [RxJava](https://github.com/ReactiveX/RxJava). 
 The concept is not quite the same as core.async, but it does support a more functional, event-driven style of programming. It's also pretty
-easy to port some core.async goodies, such as implementing timeouts by waiting for the first of several Observables to emit a value (the core.async equivalent  
+easy to port some core.async goodies, such as implementing timeouts by waiting for the first of several Observables to emit a value (the core.async equivalent 
 would be to wait for the first of several channels to close, where one channel is a timeout channel). 
 
 Some people may say that RxJava is best (or only) suited for UI programming, but I do think it has its place in the backend too. 
