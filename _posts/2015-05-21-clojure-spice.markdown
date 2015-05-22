@@ -108,7 +108,7 @@ First, we'll add one more dependency to our project:
 ```
 
 The [vinyasa library](https://github.com/zcaudate/vinyasa) provides a kind of toolbelt for REPL-driven development in Clojure. One of the tools included is a
-utility called [pull](https://github.com/zcaudate/vinyasa#pull). Using this command, Maven dependencies can be pulled in directly from the REPL,
+utility called [pull](https://github.com/zcaudate/vinyasa#pull). Using this function, Maven dependencies can be pulled in directly from the REPL,
 without the need for adding dependencies to your project. More importantly, there is no need to restart anything, which makes it perfect
 for REPL exploration.
 
@@ -146,7 +146,6 @@ As this is more involved than a few lines of code at the REPL, we'll save our wo
   (.getSum (.getPayment result)))
 
 (defn- do-test-payments
-  "Performs n test payments, returning a map of results."
   [n]
   (letfn [(pay [cc-number]
             (result-from-observable (.doPayment paymentService cc-number)))]
