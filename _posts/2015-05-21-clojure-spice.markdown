@@ -145,6 +145,7 @@ As this is more involved than a few lines of code at the REPL, we'll save our wo
   [result]
   (.getSum (.getPayment result)))
 
+; create a sequence of test payments 
 (defn- do-test-payments
   [n]
   (letfn [(pay [cc-number]
