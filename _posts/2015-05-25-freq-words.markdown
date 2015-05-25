@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "freq-words: learn to read with ClojureScript"
-date:   2015-05-21
+date:   2015-05-25
 categories: ClojureScript Reagent Boot
 ---
 
