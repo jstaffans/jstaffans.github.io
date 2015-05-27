@@ -110,11 +110,11 @@ mailing list](http://hoplon.discoursehosting.net/t/trying-to-create-a-boot-task-
 This task only considers one file - the first `.scss` files that does not start with an underscore. When using Sass, files whose name start with an underscore are files that are included in another stylesheet (`src/scss/main.scss` handles all the includes in my case), so we do not need to consider them separately.
 
 To make the task find the Sass sources, we need to add the relevant directory to
-the `:source-paths` key in the Boot environment (which already includes the `src/cljs` 
-directory):
+the `:source-paths` key in the Boot environment:
 
 ```clojure
-(set-env! :source-paths #(conj % "src/scss"))
+; This is one of the first lines in the build.boot file
+(set-env! :source-paths #{"src/cljs" "src/scss"} ...
 ```
 
 And to integrate our task into the Boot build chain, we'll add it to the pre-defined
