@@ -35,7 +35,7 @@ a large number of id's.
 #### Queues, back pressure
 
 I have grown very fond of queues as a way of decoupling the different parts of a system. 
-[The Language of the System]() is one of those classic Rich Hickey talks and provides
+[The Language of the System](https://www.youtube.com/watch?v=ROor6_NGIWU) is one of those classic Rich Hickey talks and provides
 some context for why system communication is best done using data put on queues. 
 Zach Tellman also did a [great talk on the challenges of a queue-based system](https://www.youtube.com/watch?v=1bNOO3xxMc0) at Clojure/West 2015. 
 
