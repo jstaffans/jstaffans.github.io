@@ -1,0 +1,63 @@
+---
+layout: post
+title:  "Week 26"
+date:   2015-06-30
+categories: Blog
+---
+
+Some random things I've been thinking about this week:
+
+#### Category Theory
+
+The first thing that comes into my mind when I hear "category theory" is the basic stuff we 
+learned about at university, such as the set union operation. It turns out that category 
+theory is much more than that - we can also reason about the functions and types that make up 
+a software application using category theory. I don't really grasp it yet, but I will try 
+to dive into it a bit more - and maybe pick up some Haskell along the way.
+
+* Bartosz Milewski has a really nice article series called [Category Theory for Programmers](http://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/).
+* For Clojure, there is the [cats library](https://github.com/funcool/cats).
+* I heard about a book called [Maybe Haskell](https://gumroad.com/l/maybe-haskell/?utm_source=giant-robots&utm_medium=blog&utm_campaign=announcement) that should clear up some basic concepts.
+
+#### N+1 problem
+
+I recently had a scenario where an entity fetched from the database needed an additional field
+from a different storage backend, requiring an additional query to that storage medium for each row. 
+Think of fetching a collection of books and for each book having to fetch its author separately.
+That's a lot of queries! This is called the N+1 problem.
+
+In my case, I solved the problem with some application-layer caching. Another common pattern
+is to get the id's that need to be fetched and do a batch query using e.g. `IN (1, 2, 3 ..)`, 
+which is one of the things that the neat [muse library for Clojure](https://github.com/kachayev/muse/blob/master/docs/sql.md) provides. But keep in mind that using a list of id's is [not going to perform very
+well](http://blog.jooq.org/2013/11/11/id-lists-arent-the-best-solution-for-the-n1-problem/) for
+a large number of id's. 
+
+#### Queues, back pressure
+
+I have grown very fond of queues as a way of decoupling the different parts of a system. 
+[The Language of the System]() is one of those classic Rich Hickey talks and provides
+some context for why system communication is best done using data put on queues. 
+Zach Tellman also did a [great talk on the challenges of a queue-based system](https://www.youtube.com/watch?v=1bNOO3xxMc0) at Clojure/West 2015. 
+
+One of the terms that gets thrown around a lot when talking about queues is back pressure.
+This basically refers to some mechanism that the consumer of a queue has to let the producer
+know that it can't handle any more work at the moment and may come in the form of an
+HTTP response code, a RejectedExecutionException or something other interesting. 
+Another strategy would be to eliminate the need for back pressure by using e.g. a
+dropping buffer. 
+
+#### Proper API design and HATEOAS
+
+I've finally gotten around the reading Leonard Richardson's and Mike Amundsen's book 
+[RESTful Web APIs](http://www.restfulwebapis.org/). It's making me realise all the 
+mistakes I've made designing APIs in the past - I'm definitely guilty of forcing API
+consumers to read the documentation instead of following the [HATEOAS pattern](https://en.wikipedia.org/wiki/HATEOAS). 
+
+It's also made me think again about the different data formats REST APIs normally
+produce. Everyone's favorite, JSON, turns out to be a pretty bad choice since
+it isn't a hypermedia format due to its lack of links. The [Transit format](https://github.com/cognitect/transit-format) does and also takes advantage of the fast, native JSON parsing that browsers provide.
+Other extensions to JSON include [HAL](http://stateless.co/hal_specification.html) and Collection+JSON.
+
+Another observation would be that XML perhaps isn't so bad at all, since it 
+can support the HATEOAS pattern bettern than JSON.
+
