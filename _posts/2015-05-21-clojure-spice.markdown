@@ -2,7 +2,7 @@
 layout: post
 title:  "Spicing up Java projects with Clojure"
 date:   2015-05-21
-categories: Clojure Java
+redirect_from: /clojure/java/2015/05/21/clojure-spice.html
 tags:   [clojure, java]
 ---
 
