@@ -9,7 +9,7 @@ layout: none
     <link>{{ site.url }}</link>
     <atom:link href="{{ site.url }}/feed_clojure.xml" rel="self" type="application/rss+xml" />
     {% for post in site.posts limit:20 %}
-      {% if post.tags contains 'clojure' %}
+      {% if post.tags contains 'clojure' || post.tags contains 'clojurescript' %}
         <item>
           <title>{{ post.title | xml_escape }}</title>
           <description>{{ post.content | xml_escape }}</description>
