@@ -2,6 +2,7 @@
 layout: post
 title:  "Spicing up Java projects with Clojure"
 date:   2015-05-21
+categories: Clojure Java
 tags:   [clojure, java]
 ---
 
