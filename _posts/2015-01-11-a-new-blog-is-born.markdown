@@ -2,7 +2,7 @@
 layout: post
 title:  "A new blog is born"
 date:   2015-01-11
-categories: Blog
+tags:   [blog, about]
 ---
 
 It is time for a new blog. My experiences over the last few years have changed the way I develop software a lot and I feel the need to reflect on that. 

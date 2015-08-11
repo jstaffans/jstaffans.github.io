@@ -1,8 +1,8 @@
 ---
-layout: post
-title:  "Taking duct for a spin"
-date:   2015-02-08
-categories: Clojure
+layout:     post
+title:      "Taking duct for a spin"
+date:       2015-02-08
+tags:       [clojure, microservices]
 ---
 
 I have been meaning to try building a simple web application using Stuart Sierra's [Component](https://github.com/stuartsierra/component) library for a while now. If you haven't heard about it, it's definitely worth having a look at - it is a lovely way of organising the different components that go into an application and gives you a smooth workflow in the REPL.

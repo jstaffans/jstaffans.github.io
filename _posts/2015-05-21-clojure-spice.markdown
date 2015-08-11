@@ -2,7 +2,7 @@
 layout: post
 title:  "Spicing up Java projects with Clojure"
 date:   2015-05-21
-categories: Clojure Java
+tags:   [clojure, java]
 ---
 
 Many engineers with an interest in Clojure are probably working on Java code bases for most of the day. 
