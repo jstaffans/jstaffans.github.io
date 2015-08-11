@@ -2,7 +2,7 @@
 layout: post
 title:  "freq-words: learn to read with ClojureScript"
 date:   2015-05-25
-categories: ClojureScript Reagent Boot
+categories: ClojureScript Reagent Boot 
 ---
 
 My father, a retired elementary school teacher, runs a [website](http://www.kjellstaffans.fi) 
