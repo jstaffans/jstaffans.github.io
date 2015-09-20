@@ -12,7 +12,7 @@ very much present in the agenda, but my favorite topics were definitely those de
 distributed systems and communication on a broader scale. All in all, the conference was 
 very library-, technique- and tool-oriented, there were not many talks of the more philosophical kind.
 
-The venue was the always awesome Kulturbräuerei in the north of Berlin, which works very well
+The venue was the always awesome Kulturbrauerei in the north of Berlin, which works very well
 for mid-sized conferences like Distributed Matters. I appreciated the fact that there were
 lots of standing tables around that were perfect spots for meeting people and networking - 
 I always try to be ultra-social during conferences and talk to as many people as possible.
