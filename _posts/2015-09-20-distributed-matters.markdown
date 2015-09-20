@@ -27,9 +27,9 @@ Kyle Kingsbury of [Jepsen] [2] fame is certainly an exciting choice of keynote s
 for a conference dealing with distributed systems. His talk was greatly anticipated
 by the attendees I got to talk to. While I appreciated the hand-drawn slides a lot,
 I didn't really get anything new out of the keynote that Kyle hasn't already written
-about on his blog, so it was a bit disappointing for me. There were some interesting
+about on his blog, so it was a bit disappointing for me. There was some interesting
 stuff towards the end on techniques for testing your architecture (e.g. simulate
-a network partition with `iptables`), but unfortunately those parts were skipped
+a network partition with `iptables`), but unfortunately those parts were quickly skimmed
 over due to time constraints.
 
 ### Lisp in the Machine (Joe Nash, [@jna_sh](https://twitter.com/jna_sh))
@@ -50,8 +50,8 @@ are very helpful here.
 ### A tale of queues — from ActiveMQ over Hazelcast to Disque (Philipp Krenn, [@xeraa](https://twitter.com/xeraa))
 
 The domain of the company Philipp works at, [ecosio] [3], is business process management.
-Customers basically pass messages through ecosio's systems, placing orders, tracking
-shipments and so on. There are lots of legacy systems that need connecting, for which
+Customers basically pass messages through ecosio's systems, where a typical message
+would be placing an order for some product. There are lots of legacy systems that need connecting, for which
 Apache Camel is used. Internally, messages first land in MySQL and are then forwarded 
 using a distributed queue. It might be a slightly over-engineered solution, given the 
 relatively low number of messages, but pretty interesting in its execution.
