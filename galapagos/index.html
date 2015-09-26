@@ -2866,7 +2866,7 @@ net.brehaut.ClojureTools = (function (SH) {
   };
 })(SyntaxHighlighter);
 </script><title>galapagos -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name"><a href="https://github.com/jstaffans/galapagos">galapagos</a></h1><h2 class="project-version">0.1.0-SNAPSHOT</h2><br /><p>An exploration of the GraphQL specification in Clojure</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.7.0</td></tr><tr><td class="dep-name">instaparse</td><td class="dotted"><hr /></td><td class="dep-version">1.4.1</td></tr><tr><td class="dep-name">prismatic/schema</td><td class="dotted"><hr /></td><td class="dep-version">1.0.0</td></tr><tr><td class="dep-name">com.taoensso/timbre</td><td class="dotted"><hr /></td><td class="dep-version">4.1.1</td></tr><tr><td class="dep-name">medley</td><td class="dotted"><hr /></td><td class="dep-version">0.7.0</td></tr><tr><td class="dep-name">muse</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">cats</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">org.clojure/core.async</td><td class="dotted"><hr /></td><td class="dep-version">0.1.346.0-17112a-alpha</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#galapagos.core">galapagos.core</a></li><li><a href="#galapagos.introspection">galapagos.introspection</a></li><li><a href="#galapagos.query">galapagos.query</a></li><li><a href="#galapagos.schema">galapagos.schema</a></li><li><a href="#galapagos.util">galapagos.util</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#galapagos.core" name="galapagos.core"><h1 class="project-name">galapagos.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.7.0</td></tr><tr><td class="dep-name">instaparse</td><td class="dotted"><hr /></td><td class="dep-version">1.4.1</td></tr><tr><td class="dep-name">prismatic/schema</td><td class="dotted"><hr /></td><td class="dep-version">1.0.0</td></tr><tr><td class="dep-name">com.taoensso/timbre</td><td class="dotted"><hr /></td><td class="dep-version">4.1.1</td></tr><tr><td class="dep-name">medley</td><td class="dotted"><hr /></td><td class="dep-version">0.7.0</td></tr><tr><td class="dep-name">muse</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">cats</td><td class="dotted"><hr /></td><td class="dep-version">0.4.0</td></tr><tr><td class="dep-name">org.clojure/core.async</td><td class="dotted"><hr /></td><td class="dep-version">0.1.346.0-17112a-alpha</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#galapagos.core">galapagos.core</a></li><li><a href="#galapagos.introspection">galapagos.introspection</a></li><li><a href="#galapagos.query">galapagos.query</a></li><li><a href="#galapagos.schema.helpers">galapagos.schema.helpers</a></li><li><a href="#galapagos.schema">galapagos.schema</a></li><li><a href="#galapagos.util">galapagos.util</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#galapagos.core" name="galapagos.core"><h1 class="project-name">galapagos.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns galapagos.core
   (:require [galapagos.query :refer [parse]]
             [galapagos.util :as util]
@@ -2910,7 +2910,7 @@ of its own, therefore it is not solvable. Only its children are.</p>
   (or (:alias query) (:name query)))</pre></td></tr><tr><td class="docs"><p>Coerces field input arguments using a basic string coercion matcher.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- coerced-args
   [node query]
-  (let [coercer (coerce/coercer (:args node) coerce/string-coercion-matcher)
+  (let [coercer (coerce/coercer (into {} (map :coercion (vals (:args node)))) coerce/string-coercion-matcher)
         args (or (:args query) {})
         coerced (coercer args)]
     (if-let [error-val (schema.utils/error-val coerced)]
@@ -3018,16 +3018,16 @@ or fields (leaves).</p>
 </td><td class="codes"><pre class="brush: clojure">(defmulti field-definition-in-type
   (fn [type field]
     (if-let [definition (get-in type [:fields field])]
-      (if (map? definition)
-        :direct
-        :reference-to-field-var)
+      (if (contains? definition :var)
+        :reference-to-field-var
+        :direct)
       :not-defined-in-node)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod field-definition-in-type :direct
   [type field]
   (get-in type [:fields field]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod field-definition-in-type :reference-to-field-var
   [type field]
-  (assoc {} :type (-&gt; (get-in type [:fields field]) symbol find-var deref)))</pre></td></tr><tr><td class="docs">
+  (assoc {} :type (-&gt; (get-in type [:fields field :var]) symbol find-var deref)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod field-definition-in-type :not-defined-in-node
   [_ _] nil)</pre></td></tr><tr><td class="docs"><p>Gets the definition of a field. The source of this information may be in the node or,
   if the field is part of an interface, in the map of interface definitions at the root
@@ -3275,9 +3275,54 @@ something that the galapagos execution engine understands.</p>
       (do
         (print (insta/get-failure tree))
         (throw (IllegalArgumentException. &quot;Could not parse query!&quot;)))
-      (transform tree))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#galapagos.schema" name="galapagos.schema"><h1 class="project-name">galapagos.schema</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+      (transform tree))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#galapagos.schema.helpers" name="galapagos.schema.helpers"><h1 class="project-name">galapagos.schema.helpers</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns galapagos.schema.helpers
+  (:require [medley.core :refer [map-vals]]
+            [schema.core :as s]))</pre></td></tr><tr><td class="docs"><h2>Schema helpers</h2>
+
+<p>The schema definition DSL of Galapagos is meant to be as easily usable
+as possible. The vector format of field definitions is however not ideal
+for prpcessing internally, so here are some helpers that convert those
+vectors to maps.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Takes a vector of elements defining a field and returns a map in a format
+  Galapagos can easier work with. The element vector is basically everything
+  to the right of the field identifier in an individual field definition row.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- to-field-definition
+  [v]
+  (let [required? (keyword? (some #{:!} v))
+        field-def (into {} (map #(assoc {} %1 %2)
+                             [:type :description]
+                             (if required? (filter #(not= :! %) v) v)))
+        t (:type field-def)]
+    (if (or (vector? t) (symbol? t))
+      (merge field-def {:required? required?})
+      (merge field-def {:required? required? :var t}))))</pre></td></tr><tr><td class="docs"><p>Converts a vector of field declarations as per the schema definition
+  DSL to a map, which is easier to process internally. Example:
+  [:id schema/GraphQLInt :! "The id"] ->
+  {:id {:type schema/GraphQLInt
+        :description "The id"
+        :required true}}</p>
+</td><td class="codes"><pre class="brush: clojure">(defn to-field-map
+  [v]
+  (let [parts (partition-by #(and (keyword? %) (not= :! %)) v)
+        keys (-&gt;&gt; (take-nth 2 parts) (map (partial apply keyword)))
+        defs (take-nth 2 (rest parts))
+        def-maps (map to-field-definition defs)
+        fields (into {} (map (fn [k f] (assoc {} k f)) keys def-maps))]
+    fields))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn- coercion
+  [arg arg-def]
+  (assoc {} (if (:required? arg-def) arg (s/optional-key arg)) (:type arg-def)))</pre></td></tr><tr><td class="docs"><p>Similarily to <code>to-field-map</code>, converts a vector of input value declarations
+  into a map. Adds a coercion entry for input argument coercion purposes.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn to-arg-map
+  [v]
+  (let [field-map (to-field-map v)]
+    (into {} (map (fn [[arg arg-def]]
+                    (assoc {} arg (merge arg-def {:coercion (coercion arg arg-def)})))
+               field-map))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#galapagos.schema" name="galapagos.schema"><h1 class="project-name">galapagos.schema</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns galapagos.schema
-  (:require [galapagos.introspection :as introspection]
+  (:require [galapagos.schema.helpers :as helpers]
+            [galapagos.introspection :as introspection]
             [schema.core :as s]
             [clojure.core.async :as async]
             [medley.core :refer [map-vals]]
@@ -3301,6 +3346,7 @@ metadata to the defined vars.</p>
 </td><td class="codes"><pre class="brush: clojure">(defscalar GraphQLFloat s/Num)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defscalar GraphQLString s/Str)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defscalar GraphQLBoolean s/Bool)</pre></td></tr><tr><td class="docs"><h3>Enums, interfaces, unions and custom types</h3>
+</td><td class="codes"></td></tr><tr><td class="docs"><h4>Type definition utilitiy functions</h4>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Get introspection information from var.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- type-metadata
   [type-name]
@@ -3309,13 +3355,18 @@ metadata to the defined vars.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- fields-with-introspection-metadata
   [fields]
   (map-vals (fn [field]
-              (if (map? field)
-                (with-meta field {:introspection (type-metadata (:type field))})
-                field))
+              (if (:var field)
+                field
+                (with-meta field {:introspection
+                                  (if (vector? (:type field))
+                                    ;; TODO: add ofType, do the same for NON_NULL
+                                    {:name :List :kind :LIST}
+                                    (type-metadata (:type field)))})))
     fields))</pre></td></tr><tr><td class="docs"><p>Extracts the bits of a type definition that are interesting for introspection</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- extract-introspection-metadata
   [name m]
-  (assoc {} :name (keyword name) :description (:description m)))</pre></td></tr><tr><td class="docs">
+  (assoc {} :name (keyword name) :description (:description m)))</pre></td></tr><tr><td class="docs"><h4>Type definition macros</h4>
+</td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmacro defenum
   [name &amp; values]
   `(def
@@ -3323,7 +3374,8 @@ metadata to the defined vars.</p>
      (s/enum ~@values)))</pre></td></tr><tr><td class="docs"><p>Define a GraphQL interface.</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro definterface
   [name t]
-  (let [fields-with-metadata (fields-with-introspection-metadata (:fields t))]
+  (let [field-map (helpers/to-field-map (:fields t))
+        fields-with-metadata (fields-with-introspection-metadata field-map)]
     `(def ~name
        (with-meta
          (merge ~t {:fields ~fields-with-metadata})
@@ -3331,46 +3383,41 @@ metadata to the defined vars.</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro deftype
   [name interfaces t]
   (let [interface-names (into [] (map str interfaces))
-        fields-with-metadata (fields-with-introspection-metadata (:fields t))]
+        field-map (helpers/to-field-map (:fields t))
+        fields-with-metadata (fields-with-introspection-metadata field-map)]
     `(do
        (def ~(vary-meta name assoc :introspection (merge (extract-introspection-metadata name t) {:kind :OBJECT}))
-         (merge ~t {:interfaces (map keyword ~interface-names)} {:fields ~fields-with-metadata}))
+         (merge ~t
+           {:interfaces (map keyword ~interface-names)}
+           {:fields ~fields-with-metadata}))
        (defn ~(symbol (str '-&gt; name)) [v#] (with-meta v# {:type ~(keyword name)})))))</pre></td></tr><tr><td class="docs"><p>Define a union of previously defined types.</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro defunion
   [name ts]
   `(def ~(vary-meta name assoc :introspection (merge (extract-introspection-metadata name {}) {:kind :UNION}))
      {:fields     (into {} (map :fields ~ts))
-      :interfaces (mapcat :interfaces ~ts)}))</pre></td></tr><tr><td class="docs"><p>Determines metadata for a given argument key and type pair. The key may be wrapped as
-  schema.core/OptionalKey if the argument is not required.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- arg-metadata
-  [k t]
-  (let [arg-name (if (list? k) (second k) k)]
-    (-&gt; {}
-      (assoc-in [arg-name :type]
-        (if (vector? t)
-          {:name :List :kind :LIST}
-          (type-metadata t)))
-      (assoc-in [arg-name :required] (not (list? k))))))</pre></td></tr><tr><td class="docs"><p>Defines a field that fetches something. The type will depend on what the field returns.</p>
+      :interfaces (mapcat :interfaces ~ts)}))</pre></td></tr><tr><td class="docs"><p>Defines a field that fetches something. The type will depend on what the field returns.</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro deffield
   [name s ret f]
   (if (= :- s)
     (let [[type arity] (if (vector? ret) [(first ret) :many] [ret :one])
-          args-metadata (reduce (fn [acc [k v]] (into acc (arg-metadata k v))) {} (:args f))]
-      `(def ~(vary-meta name assoc
-               :introspection (-&gt; type symbol resolve meta :introspection))
-         (merge
-           (assoc ~f :fields (:fields ~type) :type '~type :type-definition ~type :arity ~arity)
-           {:args ~(with-meta (:args f) args-metadata) :returns ~ret})))
-    (throw (IllegalArgumentException. (str &quot;Unknown schema definition operator: &quot; s)))))</pre></td></tr><tr><td class="docs"><p>Gets the arguments map of a field. If the field is a reference to a var,
-  get the arguments map from the referenced var.</p>
+          arg-map (helpers/to-arg-map (:args f))
+          args-with-metadata (fields-with-introspection-metadata arg-map)
+          ;args-metadata (reduce (fn [acc [k v]] (into acc (arg-metadata k v))) {} (:args f))
+          ]
+      `(def ~(vary-meta name assoc :introspection (-&gt; type symbol resolve meta :introspection))
+         (merge ~f
+           {:args ~args-with-metadata :returns ~ret :fields (:fields ~type) :type '~type :type-definition ~type :arity ~arity})))
+    (throw (IllegalArgumentException. (str &quot;Unknown schema definition operator: &quot; s)))))</pre></td></tr><tr><td class="docs"><p>Gets the arguments map of a field. The arguments map may be defined in a referenced var.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- field-args
   [f]
-  (if-let [t (:type f)]
-    (:args t)
-    (:args (-&gt; f symbol find-var deref))))</pre></td></tr><tr><td class="docs">
+  (let [t (:type f)]
+    (if (symbol? t)
+      (-&gt; t symbol find-var deref :args)
+      (:args t))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmacro defroot
   [name r]
-  (let [fields-with-metadata (fields-with-introspection-metadata (:fields r))]
+  (let [field-map (helpers/to-field-map (:fields r))
+        fields-with-metadata (fields-with-introspection-metadata field-map)]
     `(def ~name (merge ~r {:fields ~fields-with-metadata}))))</pre></td></tr><tr><td class="docs"><h3>Schema utilities</h3>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Check if a a node's type is scalar or enum. Relies on introspection metadata.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn scalar?
@@ -3383,34 +3430,34 @@ metadata to the defined vars.</p>
 </td><td class="codes"><pre class="brush: clojure">(defenum TypeKind :SCALAR :OBJECT :INTERFACE :UNION :ENUM :INPUT_OBJECT :LIST :NON_NULL)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(deftype TypeDescription []
   ;; TODO: missing fields (see spec)
-  {:fields {:name        {:type GraphQLString}
-            :kind        {:type TypeKind}
-            :description {:type GraphQLString}
-            :fields      'galapagos.schema/FindFields}})</pre></td></tr><tr><td class="docs">
+  {:fields [:name        GraphQLString
+            :kind        TypeKind
+            :description GraphQLString
+            :fields      'galapagos.schema/FindFields]})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(deftype FieldDescription []
   ;; There is obviously a :type field missing. This is handled by a root query field
   ;; that knows how to get the type of a field. It's done this way because the solve
   ;; function is only available at runtime, after the type map has been built.
   ;; TODO: other missing fields (see spec)
-  {:fields {:name   {:type GraphQLString}
+  {:fields [:name   GraphQLString
             :args   'galapagos.schema/FindArgs
-            :fields 'galapagos.schema/FindFields}})</pre></td></tr><tr><td class="docs">
+            :fields 'galapagos.schema/FindFields]})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(deftype InputValueDescription []
-  {:fields {:name        {:type GraphQLString}
-            :description {:type GraphQLString}}})</pre></td></tr><tr><td class="docs"><p>Skeleton field for finding a type. We can't solve anything before the type map
+  {:fields [:name        GraphQLString
+            :description GraphQLString]})</pre></td></tr><tr><td class="docs"><p>Skeleton field for finding a type. We can't solve anything before the type map
 has been created, which is done in the <code>create-schema</code> function below. The <code>solve</code>
 function is therefore added once the type map is available.</p>
 </td><td class="codes"><pre class="brush: clojure">(deffield FindType :- TypeDescription
   {:description &quot;Finds a type by name&quot;
-   :args        {:name GraphQLString}})</pre></td></tr><tr><td class="docs"><p>Likewise a skeleton field to which a <code>solve</code> method is associated once the
+   :args        [:name GraphQLString :!]})</pre></td></tr><tr><td class="docs"><p>Likewise a skeleton field to which a <code>solve</code> method is associated once the
 type map is known.</p>
 </td><td class="codes"><pre class="brush: clojure">(deffield FindObjectType :- TypeDescription
   {:description &quot;Finds the type of an object. For internal use only.&quot;
-   :args        {}})</pre></td></tr><tr><td class="docs">
+   :args        []})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(deffield FindFields :- [FieldDescription]
   {:description &quot;Finds the fields belonging to a type&quot;
    ;; TODO: :includeDeprecated doesn't actually do anything at the moment
-   :args        {(s/optional-key :includeDeprecated) GraphQLBoolean}
+   :args        [:includeDeprecated GraphQLBoolean]
    :solve       (fn [args]
                   (when (:includeDeprecated args) (log/warn &quot;Field deprecation not supported yet!&quot;))
                   (let [type-desc (parent-obj args)
@@ -3418,17 +3465,16 @@ type map is known.</p>
                     (async/go
                       (mapv
                         (fn [[name f]]
-                          (println f)
                           (let [metadata (assoc
-                                           (:introspection (or (meta f) (meta (find-var f))))
-                                           :args (meta (field-args f)))]
+                                           (:introspection (or (meta f) (meta (find-var (:var f)))))
+                                           :args (field-args f))]
                             (with-meta
                               (-&gt;FieldDescription {:name name})
                               {:introspection metadata})))
                         (:fields type-definition)))))})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(deffield FindArgs :- [InputValueDescription]
   {:description &quot;Finds the arguments of a field&quot;
-   :args        {}
+   :args        []
    :solve       (fn [args]
                   (let [field-desc (get args :__OBJ)
                         args (-&gt; field-desc meta :introspection :args)]
@@ -3437,8 +3483,10 @@ type map is known.</p>
                         (fn [[name arg-meta]]
                           (with-meta
                             (-&gt;InputValueDescription
-                              {:name name :description &quot;TODO: input value descriptions&quot; :defaultValue &quot;TODO: default values&quot;})
-                            {:introspection (:type arg-meta)}))
+                              {:name         name
+                               :description  &quot;TODO: input value descriptions&quot;
+                               :defaultValue &quot;TODO: default values&quot;})
+                            (meta arg-meta)))
                         args))))})</pre></td></tr><tr><td class="docs"><p>Builds a TypeDescription from information gathered from type map.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- build-type-description
   [type-definition]
@@ -3477,7 +3525,7 @@ type map is known.</p>
  [f val]
   (if (sequential? val)
     (map f val)
-    (f val)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a><div id="floating-toc"><ul><li class="floating-toc-li" id="floating-toc_galapagos.core">galapagos.core</li><li class="floating-toc-li" id="floating-toc_galapagos.introspection">galapagos.introspection</li><li class="floating-toc-li" id="floating-toc_galapagos.query">galapagos.query</li><li class="floating-toc-li" id="floating-toc_galapagos.schema">galapagos.schema</li><li class="floating-toc-li" id="floating-toc_galapagos.util">galapagos.util</li></ul></div></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+    (f val)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/gdeer81/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a><div id="floating-toc"><ul><li class="floating-toc-li" id="floating-toc_galapagos.core">galapagos.core</li><li class="floating-toc-li" id="floating-toc_galapagos.introspection">galapagos.introspection</li><li class="floating-toc-li" id="floating-toc_galapagos.query">galapagos.query</li><li class="floating-toc-li" id="floating-toc_galapagos.schema.helpers">galapagos.schema.helpers</li><li class="floating-toc-li" id="floating-toc_galapagos.schema">galapagos.schema</li><li class="floating-toc-li" id="floating-toc_galapagos.util">galapagos.util</li></ul></div></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
 SyntaxHighlighter.all();
 
 // hackity hack
