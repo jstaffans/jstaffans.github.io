@@ -6,8 +6,8 @@ tags:   [clojure, data structures, specter]
 ---
 
 [Specter] [1] is a new library by Nathan Marz that makes it easier to deal with
-nested data structures, like lists of maps of maps. This post explores how to work
-with Specter including some currently un-documented parts of the API.
+nested data structures, such as lists of maps of maps. This post explores some
+less-documented parts of the library.
 
 For this post, we'll be dealing with a simple movie dataset:
 
@@ -47,6 +47,10 @@ Let's for example find all movies by James Cameron with a rating higher than 8.0
 => [8.4 8.5 8.1 8.3 8.5 8.6]
 
 ```
+
+**(Note: Nathan Marz let me know via Twitter that there's a  better
+to do this, more on that at the end of the post!)**
+
 
 So we get the ratings and they are all greater than 8.0 - but we have 
 lost the original maps. How do we get those? It turns out that you can reference 
@@ -122,17 +126,45 @@ movies of James Cameron that have an either very bad or very good rating:
 
 ```
 
-It's easy to see how you, once you have selected the maps that you are interested in,
-can use the Clojure standard library to perform aggregation, calculate statistics 
-and so forth. 
+So this works, but it's clunky and requires a helper function. Is there an
+easier way?
+
+#### The right way
+
+As pointed out to me by the library author, there's a much better way of 
+accomplishing the above:
+
+```clojure
+(s/select 
+  [s/ALL
+   (s/selected? :director #(= "James Cameron" %))
+   (s/selected? :rating #(> % 8.0))]
+  movies)
+
+```
+
+The `selected?` function filters the current value based on whether the selector
+that follows matches anything. It doesn't mess up the return value like the other
+examples above. It can of course be combined with conditional paths or multipaths
+as in the previous example:
+
+```clojure
+(s/select 
+  [s/ALL
+   (s/selected? :director #(= "James Cameron" %))
+   (s/selected? (s/multi-path [:rating #(> % 8.0)] [:rating #(< % 6.0)]))]
+  movies)
+
+```
 
 #### Conclusion
 
 I think Specter is one of the best things to come out of the Clojure ecosystem
-recently. For transformation of nested data structures, it's very
-easy to use. Exploiting Specter for aggregation and analysis over sequences
-of nested data structures is also possible, but it currently requires the 
-user to jump through a few hoops. 
+recently. I find it a lot easier to grasp how to use Specter than for example
+zippers, which is another popular way of working with nested data structures.
+It's still a bit dense to get into, though - Specter would benefit greatly
+from something like the [Learn Datalog Today] [2] website!
 
 
 [1]: https://github.com/nathanmarz/specter
+[2]: http://www.learndatalogtoday.org/
