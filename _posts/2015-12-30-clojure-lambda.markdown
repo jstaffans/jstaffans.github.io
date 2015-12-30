@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "A look at running Clojure on AWS Lambda"
-date:   2015-12-15
+date:   2015-12-30
 tags:   [clojure, lambda, aws]
 ---
 
@@ -131,8 +131,8 @@ with regards to RDS access, most problems can be worked around. The JVM startup 
 is a blocker for applications with real-time needs but not a problem for data-crunching
 background tasks. 
 
-[1] https://github.com/mcohen01/amazonica
-[2] https://forums.aws.amazon.com/thread.jspa?threadID=166946&start=25&tstart=0
-[3] http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role
-[4] https://github.com/levand/immuconf
-[5] https://github.com/uswitch/lambada
+[1]: https://github.com/mcohen01/amazonica
+[2]: https://forums.aws.amazon.com/thread.jspa?threadID=166946&start=25&tstart=0
+[3]: http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role
+[4]: https://github.com/levand/immuconf
+[5]: https://github.com/uswitch/lambada
