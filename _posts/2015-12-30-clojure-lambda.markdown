@@ -86,7 +86,7 @@ overridden by both a file in an S3 bucket and a file that is available only loca
             [clojure.tools.logging :as log])
   (:refer-clojure :exclude [get]))
 
-(defn base-config
+(defn- base-config
   []
   (io/resource "config.edn"))
 
