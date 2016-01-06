@@ -12,11 +12,11 @@ less-documented parts of the library.
 For this post, we'll be dealing with a simple movie dataset:
 
 ```clojure
-[{:name "Lethal Weapon", :director "Paul Verhoeven", :rating 7.6}
- {:name "RoboCop", :director "George P. Cosmatos", :rating 7.5}
- {:name "Lethal Weapon 3", :director "Ted Kotcheff", :rating 6.6}
- {:name "Rambo III", :director "John McTiernan", :rating 5.4}
- {:name "The Terminator", :director "Peter MacDonald", :rating 8.1}
+[{:name "First Blood", :director "Ted Kotcheff", :rating 7.6}
+ {:name "Lethal Weapon 3", :director "Richard Donner", :rating 6.6}
+ {:name "Predator", :director "John McTiernan", :rating 7.8}
+ {:name "Mad Max Beyond Thunderdome", :director "George Miller", :rating 6.1}
+ {:name "The Terminator", :director "James Cameron", :rating 8.1}
  ... ]
 ```
 
@@ -26,7 +26,7 @@ Transforming the sequence is simple enough:
 (require '[com.rpl.specter :as s])
 => nil
 (s/transform [s/ALL :name] clojure.string/upper-case movies)
-=> [{:name "LETHAL WEAPON", :director "Paul Verhoeven", :rating 7.6}, ... ]
+=> [{:name "FIRST BLOOD", :director "Ted Kotcheff", :rating 7.6}, ... ]
 ``` 
 
 In general, transformation is Specter's forte and is covered very well
@@ -44,13 +44,12 @@ Let's for example find all movies by James Cameron with a rating higher than 8.0
      [:director #(= "James Cameron" %)] 
      [:rating #(> % 8.0)])] 
   movies)
-=> [8.4 8.5 8.1 8.3 8.5 8.6]
+=> [8.1 8.5 8.6]
 
 ```
 
-**(Note: Nathan Marz let me know via Twitter that there's a  better
-to do this, more on that at the end of the post!)**
-
+**(Note: Nathan Marz let me know via Twitter that there's a better
+to do the following, more on that at the end of the post!)**
 
 So we get the ratings and they are all greater than 8.0 - but we have 
 lost the original maps. How do we get those? It turns out that you can reference 
@@ -65,7 +64,7 @@ whatever value is selected by Specter at this level of nesting. If we example pu
      [:director #(= "James Cameron" %)] 
      [:rating #(> % 8.0) s/VAL])] 
   movies)
-=> [[8.4 8.4] [8.5 8.5] [8.1 8.1] [8.3 8.3] [8.5 8.5] [8.6 8.6]]
+=> [[8.1 8.1] [8.5 8.5] [8.6 8.6]]
 ```
 
 When working with sequences of maps, it's usually the case that we
@@ -80,7 +79,7 @@ of the selector path:
      [:director #(= "James Cameron" %)] 
      [:rating #(> % 8.0)])] 
   movies)
-=> => [[{:name "Braveheart", :director "James Cameron", :rating 8.4} 8.4] ... ]
+=> [[{:name "The Terminator", :director "James Cameron", :rating 8.1} 8.1] ... ]
 ``` 
 
 Now we get the full map back, but it's wrapped in a collection. We can
@@ -104,7 +103,7 @@ Now working with sequences of maps is more comfortable:
      [:director #(= "James Cameron" %)] 
      [:rating #(> % 8.0)])] 
   movies)
-=> [{:name "Braveheart", :director "James Cameron", :rating 8.4} ... ]
+=> [{:name "The Terminator", :director "James Cameron", :rating 8.1} ... ]
 ``` 
 
 Specter's path definition functions can be exploited to get e.g. 
@@ -117,15 +116,12 @@ movies of James Cameron that have an either very bad or very good rating:
    (s/cond-path [:director #(= "James Cameron" %)]
      (s/multi-path [:rating #(> % 8.5)] [:rating #(< % 6.0)]))] 
   movies)
-
 =>
-[{:name "Terminator 2: Judgment Day",
-  :director "James Cameron",
-  :rating 8.6}
- {:name "Rambo III", :director "James Cameron", :rating 5.4}]
+[{:name "Terminator 3: Judgment Day", 
+  :director "James Cameron", :rating 8.6}
+ {:name "Piranhas II", :director "James Cameron", :rating 3.5}]
 
 ```
-
 So this works, but it's clunky and requires a helper function. Is there an
 easier way?
 
