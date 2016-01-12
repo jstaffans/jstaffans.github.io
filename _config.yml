@@ -1,7 +1,7 @@
 gems:
   - jekyll-redirect-from
 
-name: A developer's notes
+name: "Johannes Staffans’ Blog"
 meta_description: "A blog focused on technology, software development and consulting."
 meta_author: "Johannes Staffans"
 
