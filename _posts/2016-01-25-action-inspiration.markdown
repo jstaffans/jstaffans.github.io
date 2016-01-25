@@ -85,7 +85,7 @@ a lot of times throwing it out is just the right thing to do.
 
 ### Getting stuck
 
-Getting stuck and not knowing how to proceed with a particular programming problem is maybe the biggest discouragment 
+Getting stuck and not knowing how to proceed with a particular programming problem is maybe the biggest source of discouragment 
 for new coders. It is unfortunately something you'll have to become used to, as this is something that happens very often, even to experienced
 programmers.
 
