@@ -91,7 +91,7 @@ programmers.
 
 The scary thing about getting stuck coding is that it can feel very personal and intimidating. In other occupations, one might
 get stuck because a tool breaks, or a shipment of goods is late, or something else that is out of our control.
-In software development, it's easy to think "I should really know how to solve this problem!" or something along
+In software development, it's easy to think, "I should really know how to solve this problem!", or something along
 those lines. Programming is after all primarily a mental excercise. 
 
 Once down the rabbit hole of feeling inadequate, it's difficult to get out. The primitive and irrational part of our mind,
