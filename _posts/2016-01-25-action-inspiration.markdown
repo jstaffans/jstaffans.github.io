@@ -86,7 +86,7 @@ a lot of times throwing it out is just the right thing to do.
 ### Getting stuck
 
 Getting stuck and not knowing how to proceed with a particular programming problem is maybe the biggest source of discouragment 
-for new coders. It is unfortunately something you'll have to become used to, as this is something that happens very often, even to experienced
+for new coders. It is unfortunately something one has to become used to, as this is something that happens very often, even to experienced
 programmers.
 
 The scary thing about getting stuck coding is that it can feel very personal and intimidating. In other occupations, one might
