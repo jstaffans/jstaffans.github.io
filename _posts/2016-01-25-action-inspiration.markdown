@@ -94,7 +94,7 @@ get stuck because a tool breaks, or a shipment of goods is late, or something el
 In software development, it's easy to think, "I should really know how to solve this problem!", or something along
 those lines. Programming is after all primarily a mental excercise. 
 
-Once down the rabbit hole of feeling inadequate, it's difficult to get out. The primitive and irrational part of our mind,
+Once down the rabbit hole of feeling inadequate, it's difficult to get out. The primitive and irrational part of the mind,
 the limbic system that produces emotions like fear and anger and triggers fight-or-flight responses,
 is in full control and does not give the slow, logical prefrontal cortex a chance to solve the problem. 
 Daniel Kahneman's excellent book ["Thinking, Fast and Slow"] [5] explains this mental process, modeled as 
