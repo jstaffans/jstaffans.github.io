@@ -2,7 +2,7 @@
 layout: post
 title:  Learn to read with ClojureScript, part 2
 date:   2016-03-06
-tags:   [clojurescript, reagent, boot]
+tags:   [clojurescript, reagent, re-frame, boot, figwheel]
 ---
 
 Almost a year ago, I [wrote about implementing a learning aid for children in elementary school using ClojureScript] [1].
@@ -47,8 +47,8 @@ of groups of words that the user can select for practice:
 
 ```
 To keep track of the current words to show, I could have put the entire word array into the app state
-and maybe pushed the currently selected group via a subscription to the view component. But as that constitutes
-just static data, I instead just used a `:current-group` key and did a lookup in the view component of the actual
+and pushed the currently selected group via a subscription to the view component. But as the actual words constitute
+just static data, I instead just pushed a `:current-group` key to the view and let the view component do a lookup of the actual
 words to show based on that. Re-frame stresses to keep view components dumb; I think a a simple lookup is dumb enough!
 
 ### Figwheel
@@ -57,7 +57,22 @@ I had some problems with Figwheel reloading at first. I used [secretary] [5] for
 the root page reloads fine, reloading while on a route (`/#/group/4` for example) would result in a blank
 page. I could fix that by removing the Fighweel reloading configuration from the Leiningen project file and
 putting it in a `dev` namespace instead - it turns out that you shouldn't let Figwheel reset the whole app,
-just re-mount the root node:
+just re-mount the root node.
+
+The `core` namespace has a function that performs initialisation of the app and mounts the root node:
+
+```clojure
+(defn mount-root
+  []
+  (reagent/render [freq-words-2.views/app] (.getElementById js/document "app")))
+
+(defn ^:export main []
+  (dispatch [:initialise-db])
+  (routes/init)
+  (mount-root))
+```
+
+The project file had this setting:
 
 ```clojure
 ;; project.clj:
@@ -65,6 +80,8 @@ just re-mount the root node:
 ;; reload whole app: causes blank pages when reloading route
 :figwheel {:on-jsload "freq-words-2.core/main"}
 ```
+
+The replacement for the above:
 
 ```clojure
 ;; dev.cljs:
@@ -74,6 +91,8 @@ just re-mount the root node:
    :websocket-url "ws://localhost:3449/figwheel-ws"
    :jsload-callback mount-root)
 ```
+
+Check out the [sources] [9] to see the whole setup.
 
 ### Devtools, REPL
 
