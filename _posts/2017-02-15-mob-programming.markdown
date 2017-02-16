@@ -15,7 +15,7 @@ Mob programming is a concept that none of us had any prior experience with -- I 
 it in passing, but that was about it. We are however used to working in pairs and have a pretty
 well-functioning team without any derailers, which made things a lot easier. 
 
-# Motivation
+## Motivation
 
 The primary motivation for having all engineers work tightly together was to **develop a shared
 understanding** of the problem domain and to enable us to later split up into pairs and work on 
@@ -29,7 +29,7 @@ interdependent fashion - in such a setting, each individual is aware of the othe
 areas of expertise and skillset and rely upon the support of colleagues to effectively complete 
 their tasks¹. Both mob and pair programming foster collaboration and mutual learning.
 
-# The setup
+## The setup
 
 We booked a meeting room and re-arranged the tables and chairs to face in one direction and 
 set up a projector to mirror a laptop screen onto the wall. We had a few different keyboards 
@@ -38,7 +38,7 @@ since we would all be sharing a keyboard and mouse.
 
 We used a timer to ping us to rotate the "driver" every twenty minutes. 
 
-# Day one: requirements
+## Day one: requirements
 
 The project was new, but still based on some previous work that had been going on within the 
 company as well as on extensive research that had been done previously by an individual on 
@@ -51,7 +51,7 @@ document.
 Even though we didn't do any coding, having the whole team together with a clear agenda worked 
 really well towards building up understanding for the problem domain. 
 
-# Day two
+## Day two
 
 In the morning, we set up a goal for the day -- to get a basic project setup running and deployed
 on AWS. We chose a Python/Django-based backend because of familiarity with that stack, but included
@@ -68,7 +68,7 @@ along the line of "I had no idea you could do that with PyCharm!".
 By the end of the day, we had reached our goal -- a service running on AWS, with everything up and
 ready for real implementation work to commence the following day. 
 
-# Day three
+## Day three
 
 The agenda for the day was to tackle one of the areas of the system that needed especially careful 
 architecting and carried considerable technical risk with it. We spent some time in the morning
@@ -91,7 +91,7 @@ We achieved our goal and did a short retrospective about the experience doing mo
 Everyone was very happy with the experience. One team member suggested that the mob programming 
 format should be the *default* from now on -- we split up only if we really have to! 
 
-# Conclusion
+## Conclusion
 
 A highly effective team is one that collaborates well. Mob programming is maybe the most collaborative
 way of working for a software development team and has positive repercussions long after the mob has 
