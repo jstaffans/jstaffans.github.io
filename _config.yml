@@ -1,5 +1,7 @@
 gems:
   - jekyll-redirect-from
+  - jekyll-paginate
+  - jekyll-feed
 
 name: "Johannes Staffans’ Blog"
 meta_description: "A blog focused on technology, software development and consulting."
