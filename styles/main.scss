@@ -1,7 +1,6 @@
 @import 'basscss';
 
 $accent: #FF6400;
-$grey: #CCC;
 $grey-dark: #6F6F6F;
 $grey-darker: #333333;
 $white: #FFF;
@@ -19,16 +18,16 @@ body {
 }
 
 a, a:visited, a:hover {
-  color: $grey-darker;
+  color: darken($accent, 5%);
 }
 
 .header {
-  background: $accent;
-  padding: 20px;
+  border-bottom: 10px solid $accent;
 
   &__content {
     max-width: 900px;
     margin: 0 auto;
+    padding: 30px 32px 0 32px;
   }
 
   &__headline {
@@ -43,10 +42,25 @@ a, a:visited, a:hover {
       text-decoration: underline;
     }
   }
+
+  .border-triangle {
+    height: 30px;
+    width: 30px;
+
+    transform: translateY(20px);
+
+    polygon {
+      fill: $accent;
+
+      &.mask {
+        fill: white;
+      }
+    }
+  }
 }
 
 .container {
   max-width: 900px;
   margin: 30px auto;
-  padding: 0 20px;
+  padding: 0 32px;
 }

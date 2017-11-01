@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "A new blog is born"
 date:   2015-01-11
 tags:   [blog, about]
