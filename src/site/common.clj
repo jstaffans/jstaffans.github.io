@@ -1,4 +1,7 @@
-(ns site.common)
+(ns site.common
+  (:require [clj-time.core :as t]
+            [clj-time.coerce :as coerce]
+            [clj-time.format :as fmt]))
 
 (defn head
   []
@@ -22,9 +25,6 @@
      [:h1.header__headline "Johannes Staffans"]]
     [:div.sm-col
      [:a {:href "#"} "about"]]]
-   ;; <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-triangle">
-   ;;   <polygon points="0,0 100,0 50,100"/>
-   ;; </svg>
    [:div.clearfix
     [:svg.left.border-triangle {:xmlns "http://www.w3.org/2000/svg" :version "1.1"}
      [:polygon.mask {:points "0,0 30,0 30,30 0,30"}]
@@ -32,3 +32,8 @@
     [:svg.right.border-triangle {:xmlns "http://www.w3.org/2000/svg" :version "1.1"}
      [:polygon.mask {:points "0,0 30,0 30,30 0,30"}]
      [:polygon {:points "30,15 0,30 0,0"}]]]])
+
+(defn post-date
+  [date]
+  (let [d (coerce/from-date date)]
+    [:span (fmt/unparse (fmt/formatter "dd.MM.YYYY") d)]))

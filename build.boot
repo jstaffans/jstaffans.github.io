@@ -3,7 +3,8 @@
  :dependencies '[[perun "0.4.2-SNAPSHOT" :scope "test"]
                  [pandeiro/boot-http "0.8.1" :scope "test"]
                  [deraen/boot-sass "0.3.1" :scope "test"]
-                 [hiccup "1.0.5"]])
+                 [hiccup "1.0.5"]
+                 [clj-time "0.14.0"]])
 
 (require '[io.perun :as p]
          '[pandeiro.boot-http :refer [serve]]
