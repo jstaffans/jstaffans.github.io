@@ -1,5 +1,6 @@
 (ns site.core
   (:require [hiccup.page :as hp]
+            [clojure.string :refer [split-lines]]
             [site.common :refer [head header post-date]]))
 
 (defn trace
@@ -8,28 +9,48 @@
   x)
 
 (defn base
-  [content]
+  [content & {:keys [title]}]
   (hp/html5
-   (head)
+   (head title)
    [:div
     (header)
     [:div.container
      content]]))
 
+(defn- teaser
+  [entry]
+  (let [text (-> entry :content split-lines first)]
+    [:div
+     text
+     [:p [:a {:href (:permalink entry)} "Read more ..."]]]))
+
 (defn index
   [{:keys [entries]}]
   (base
-   [:div (str (count entries) " posts.")]))
+   [:div
+    [:p "Hi, welcome to my blog! Here's my latest post:"]
+    (let [latest (-> entries first)]
+      [:div
+       [:h3 (:title latest)]
+       (teaser latest)])
+    [:h2 "Other posts"]
+    [:div.posts
+     (for [entry entries]
+       [:div.sm-flex
+        [:div.posts__date (post-date entry)]
+        [:div [:a {:href (:permalink entry)} (:title entry)]]])]]))
 
 (defn post
-  [data]
+  [{:keys [entry]}]
   (base
    [:div
     [:div.flex.items-baseline.justify-between
-     [:h2 (-> data :entry :title)]
-     [:div.h3 (post-date (-> data :entry :date))]]
+     [:h2 (:title entry)]
+     [:div (post-date entry)]]
     [:div
-     (-> data :entry :content)]]))
+     (:content entry)]
+    [:div [:a {:href "/"} "Back"]]]
+   :title (:title entry)))
 
 (defn page
   [data]
