@@ -1,5 +1,6 @@
 (set-env!
  :source-paths #{"src" "content" "styles"}
+ :resource-paths #{"resources"}
  :dependencies '[[perun "0.4.2-SNAPSHOT" :scope "test"]
                  [pandeiro/boot-http "0.8.1" :scope "test"]
                  [deraen/boot-sass "0.3.1" :scope "test"]
