@@ -1,5 +1,4 @@
 ---
-layout:     post
 title:      "Taking duct for a spin"
 date:       2015-02-08
 tags:       [clojure, microservices]
@@ -22,12 +21,12 @@ Besides the endpoint solution, duct provides some other useful things, such as s
 of application configuration parameters through environment variables. I love not having to set
 those things up myself.
 
-## The application
+### The application
 
 For my toy project, I decided to implement a simple payment service. The basic interactions can be seen 
 in the following diagram (yellow boxes represent endpoint components, green boxes are background service components):
 
-![interaction diagram](/assets/images/pay-me.png)
+![interaction diagram](/images/pay-me.png)
 
 So the user enters a credit card number, which is verified by a phony verification endpoint. The verification
 endpoint provides a secure token with which further transactions can be performed. A payment processing component
@@ -42,7 +41,7 @@ There's a tiny ClojureScript frontend that handles the AJAX request to get the t
 a list of transactions on the payment confirmation page.
 
 Communication between components is handled using core.async channels. As a side note, I can say
-that implementing this web application proved a very useful excercise in understanding core.async 
+that implementing this web application proved a very useful exercise in understanding core.async 
 channels as a means of communication between components. I had earlier mainly seen them as a way 
 of handling background tasks, such as firing web requests using the callback API of 
 [http-kit](http://www.http-kit.org/). Now I can see that the perhaps most useful case for core.async 
