@@ -35,7 +35,7 @@
        (teaser latest)])
     [:h2 "Other posts"]
     [:div.posts
-     (for [entry entries]
+     (for [entry (rest entries)]
        [:div.sm-flex
         [:div.posts__date (post-date entry)]
         [:div [:a {:href (:permalink entry)} (:title entry)]]])]]))
