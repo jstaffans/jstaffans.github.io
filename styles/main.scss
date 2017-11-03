@@ -1,6 +1,9 @@
 @import 'basscss';
 
+$width: 900px;
+
 $accent: #FF6400;
+$grey-bg: #EEE;
 $grey: #CCC;
 $grey-dark: #6F6F6F;
 $grey-darker: #333333;
@@ -26,7 +29,7 @@ a, a:visited, a:hover {
   border-bottom: 10px solid $accent;
 
   &__content {
-    max-width: 900px;
+    max-width: $width;
     margin: 0 auto;
     padding: 30px 32px 0 32px;
   }
@@ -84,4 +87,21 @@ blockquote {
   border-left: 5px solid $grey;
   color: $grey-dark;
   font-style: italic;
+}
+
+pre {
+  background: $grey-bg;
+  padding: 20px;
+}
+
+p > code, strong > code {
+  padding: 1px 3px;
+
+  font-size: 120%;
+  background: $grey-bg;
+  border: 1px solid $grey;
+}
+
+img {
+  max-width: $width;
 }
