@@ -18,7 +18,7 @@
     (comp (sass)
        (sift :move {#"main.css" "public/styles/main.css"})
        (p/markdown)
-       (p/collection :renderer 'site.core/index :filterer post?)
+       (p/collection :renderer 'site.core/index :filterer post? :sortby :date)
        (p/render :renderer 'site.core/post :filterer post?)
        (p/render :renderer 'site.core/page :filterer page?))))
 
