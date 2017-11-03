@@ -34,7 +34,7 @@ handles interaction with an imaginary third-party service provider and a reporti
 all transactions. The imaginary third-party payment service provider is notoriously unreliable, so about half the time, the transaction will time out.
 
 Note that the credit card number verification and the payment transaction processing would in the
-real world be handled by the *same* third party provider - I'm just faking things here, providing
+real world be handled by the *same* third party provider — I'm just faking things here, providing
 the token on my own.
 
 There's a tiny ClojureScript frontend that handles the AJAX request to get the token and prints out 
@@ -47,6 +47,6 @@ of handling background tasks, such as firing web requests using the callback API
 [http-kit](http://www.http-kit.org/). Now I can see that the perhaps most useful case for core.async 
 is exactly this: communication between different parts of a system. 
 
-The whole thing is deployable using Docker - more information on that in the [README](https://github.com/jstaffans/pay-me#deployment). The source code is [available on GitHub](https://github.com/jstaffans/pay-me).
+The whole thing is deployable using Docke, more information on that in the [README](https://github.com/jstaffans/pay-me#deployment). The source code is [available on GitHub](https://github.com/jstaffans/pay-me).
 
 

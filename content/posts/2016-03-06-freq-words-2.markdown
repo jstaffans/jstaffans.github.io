@@ -5,7 +5,7 @@ date:   2016-03-06
 tags:   [clojurescript, reagent, re-frame, boot, figwheel]
 ---
 
-Almost a year ago, I [wrote about implementing a learning aid for children in elementary school using ClojureScript] [1].
+Almost a year ago, I [wrote about implementing a learning aid for children in elementary school using ClojureScript][1].
 I finally got around to finishing this project now and decided to write a few words about the experience.
 
 For the first iteration, I had decided to use Boot, mostly due to the simpler integration of things like
@@ -24,15 +24,15 @@ clojure.lang.Compiler$CompilerException: java.lang.RuntimeException:
 
 I tried looking over some more recent Boot/Reagent examples to learn what I should be doing,
 but couldn't really figure anything out. Giving up, I started a new project from scratch
-using Leiningen and Figwheel, using the [reagent-figwheel template] [2]. Oh the joy of greenfields
+using Leiningen and Figwheel, using the [reagent-figwheel template][2]. Oh the joy of greenfields
 development!
 
 ### Re-frame
 
-For the new version, I decided to try out [re-frame] [3], an Elm-inspired, FRP-ish framework for Reagent applications.
+For the new version, I decided to try out [re-frame][3], an Elm-inspired, FRP-ish framework for Reagent applications.
 Working within the confines of a well-defined framework turned out to be a big win for me. I agree
-with Malcolm Sparks about the [advantage of having a box to put your stuff into] [4] when you're
-getting used to developing in a new environment - for me, in this case, frontend development with
+with Malcolm Sparks about the [advantage of having a box to put your stuff into][4] when you're
+getting used to developing in a new environment — for me, in this case, frontend development with
 Reagent. You should watch that talk, it's pretty good!
 
 Of course, re-frame is no magic bullet. I put a lot of thought into for example what my state model
@@ -53,10 +53,10 @@ words to show based on that. Re-frame stresses to keep view components dumb; I t
 
 ### Figwheel
 
-I had some problems with Figwheel reloading at first. I used [secretary] [5] for routing, and whereas
+I had some problems with Figwheel reloading at first. I used [secretary][5] for routing, and whereas
 the root page reloads fine, reloading while on a route (`/#/group/4` for example) would result in a blank
 page. I could fix that by removing the Fighweel reloading configuration from the Leiningen project file and
-putting it in a `dev` namespace instead - it turns out that you shouldn't let Figwheel reset the whole app,
+putting it in a `dev` namespace instead — it turns out that you shouldn't let Figwheel reset the whole app,
 just re-mount the root node.
 
 The `core` namespace has a function that performs initialisation of the app and mounts the root node:
@@ -96,7 +96,7 @@ Check out the [sources] [9] to see the whole setup.
 
 ### Devtools, REPL
 
-Another gem that I discovered during the development of this application was [cljs-devtools] [6].
+Another gem that I discovered during the development of this application was [cljs-devtools][6].
 It's extremely helpful for logging ClojureScript values to the Chrome console. I enable it
 in the `dev` namespace, so it's only available during development:
 
@@ -105,9 +105,9 @@ in the `dev` namespace, so it's only available during development:
 (devtools/install!)
 ```
 
-I didn't use the ClojureScript REPL much - Figwheel reloading and cljs-devtools were enough for
+I didn't use the ClojureScript REPL much — Figwheel reloading and cljs-devtools were enough for
 a smooth development experience. The rare occasions when I put the REPL to use were mostly
-for [inspecting and interacting with the app state directly] [7].
+for [inspecting and interacting with the app state directly][7].
 
 ### Conclusion
 
@@ -115,7 +115,7 @@ Leiningen, Figwheel and re-frame brought stability and sanity to my frontend dev
 undertakings. Hats off to all the people who have brought the ClojureScript ecosystem and
 development experience to where we are now!
 
-You can see the live application [here] [8]. Sources are on [Github] [9].
+You can see the live application [here][8]. Sources are on [Github][9].
 
 [1]: http://jstaffans.github.io/2015/05/25/freq-words.html
 [2]: https://github.com/gadfly361/reagent-figwheel

@@ -5,7 +5,7 @@ date:   2016-01-25
 tags:   [software development, getting started, advice, clojurebridge, clojure]
 ---
 
-Last weekend, a [ClojureBridge] [1] event [took place in Berlin] [2]. I was one of the coaches and had
+Last weekend, a [ClojureBridge][1] event [took place in Berlin][2]. I was one of the coaches and had
 a wonderful time exploring Clojure with a group of new-comers to the language. In addition to coding,
 some lightning talks touching upon different aspects of software development in general and Clojure 
 in particular were held. One of the presentations was by me, in which I talked about some of the hurdles that novice 
@@ -39,7 +39,7 @@ intimidating if you are not familiar with programming. What editor should I be u
 help me solve my problem? How on earth should I code so that the solution is elegant, I heard that writing
 spaghetti code is really bad?
 
-There's a quote by [Arthur Ashe] [3], winner of three Grand Slams in tennis and recipient of the Presidential
+There's a quote by [Arthur Ashe][3], winner of three Grand Slams in tennis and recipient of the Presidential
 Medal of Freedom, that goes:
 
 > Start where you are.
@@ -59,9 +59,9 @@ Iterating in small steps is key - a common beginner mistake is to try to solve t
 once. Always try to find the smallest thing you can solve first. If your problem involves working with
 a collection of values, first implement a solution that handles a single value. Work your way from the
 small to the large. There are some good books out there that can help you to learn this divide-and-conquer
-approach, such as ["Programming Interviews Exposed"] [4]. 
+approach, such as ["Programming Interviews Exposed"][4]. 
 
-Beware of [bikeshedding] [6] (a term that gets thrown around a lot among software developers 
+Beware of [bikeshedding][6] (a term that gets thrown around a lot among software developers 
 and basically means wasting time on irrelevant details). At the end of the day, what your program *does* is what matters, 
 not which framework you use, which editor or which programming language. 
 
@@ -97,7 +97,7 @@ those lines. Programming is after all primarily a mental excercise.
 Once down the rabbit hole of feeling inadequate, it's difficult to get out. The primitive and irrational part of the mind,
 the limbic system that produces emotions like fear and anger and triggers fight-or-flight responses,
 is in full control and does not give the slow, logical prefrontal cortex a chance to solve the problem. 
-Daniel Kahneman's excellent book ["Thinking, Fast and Slow"] [5] explains this mental process, modeled as 
+Daniel Kahneman's excellent book ["Thinking, Fast and Slow"][5] explains this mental process, modeled as 
 two systems that drive the way we think, in fascinating detail. 
 
 To get un-stuck with a difficult problem, you need to give your brain time to process the information. 

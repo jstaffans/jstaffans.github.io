@@ -24,12 +24,12 @@ I recently watched a [talk](https://www.youtube.com/watch?v=yk_VlKUDKMA) about m
 that resonated very well with me. In the talk, two different kinds of microservice architectures are described:
 platforms and distributed service layers. 
 
-![platform](/assets/images/platform.png)
+![platform](/images/platform.png)
 
 A **platform** consists of vertically sliced microservices and a gateway layer responsible for orchestrating access 
-to the services - the services themselves do not talk to each other but are instead completely self-contained.
+to the services — the services themselves do not talk to each other but are instead completely self-contained.
 This includes having their own domain models, which can be shared with the gateway layer via e.g. a client library,
-a set of Protobuf message types or something else. THe gateway layer is responsible for discoverability and in case of 
+a set of Protobuf message types or something else. The gateway layer is responsible for discoverability and in case of 
 failure, should let any clients know that a particular service is not available. HATEOAS is one way of accomplishing
 this, the gateway providing a service map as part of its API:
 
@@ -62,10 +62,10 @@ in a sort of [directed acyclic graph](https://en.wikipedia.org/wiki/Directed_acy
 will lead to high coupling between services. It's also useful to organise services into two rough camps -
 services that produce data and other services that consume data. 
 
-![platform](/assets/images/distributed-services.png)
+![platform](/images/distributed-services.png)
 
 The clients of a particular service should be responsible for understanding its API and provide data in a 
-format that the service expects. API versioning and good documentation help here - sharing a domain model
+format that the service expects. API versioning and good documentation help here — sharing a domain model
 is not such a good idea, because the landscape is more dynamic with any service being able to call basically
 any other service in the topography. 
 
@@ -74,7 +74,7 @@ should however be avoided whenever possible. Communicating using queues (for ser
 is not such a big deal, such an email sending service) or with some distributed messaging scheme should
 be greatly preferred, because it further decouples services from each other. If you are worried about
 introducing further overhead in the form of a central message broker, have a look at what your platform
-already offers - in an AWS landscape, for example, it's possible to build a pub/sub architecture
+already offers — in an AWS landscape, for example, it's possible to build a pub/sub architecture
 using SQS and SNS. It can be [beautifully simple](https://github.com/meducation/propono). 
 
 As the bane of distributed service communication, look no further than shared database schemas. 

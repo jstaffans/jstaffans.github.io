@@ -5,7 +5,7 @@ date:   2015-11-19
 tags:   [clojure, data structures, specter]
 ---
 
-[Specter] [1] is a new library by Nathan Marz that makes it easier to deal with
+[Specter][1] is a new library by Nathan Marz that makes it easier to deal with
 nested data structures, such as lists of maps of maps. This post explores some
 less-documented parts of the library.
 
@@ -30,7 +30,7 @@ Transforming the sequence is simple enough:
 ``` 
 
 In general, transformation is Specter's forte and is covered very well
-by the [documentation] [1]. I was however interested in exploiting 
+by the [documentation][1]. I was however interested in exploiting 
 Specter for doing analysis and aggregation of data stored in a sequence
 of nested maps. It is possible to do so with standard Clojure functions,
 but I like the declarativeness of Specter and wanted to give it a shot.
@@ -51,7 +51,7 @@ Let's for example find all movies by James Cameron with a rating higher than 8.0
 **(Note: Nathan Marz let me know via Twitter that there's a better
 to do the following, more on that at the end of the post!)**
 
-So we get the ratings and they are all greater than 8.0 - but we have 
+So we get the ratings and they are all greater than 8.0, but we have 
 lost the original maps. How do we get those? It turns out that you can reference 
 the `VAL` symbol basically anywhere within the selector path. This resolves to
 whatever value is selected by Specter at this level of nesting. If we example put 
@@ -158,8 +158,8 @@ as in the previous example:
 I think Specter is one of the best things to come out of the Clojure ecosystem
 recently. I find it a lot easier to grasp how to use Specter than for example
 zippers, which is another popular way of working with nested data structures.
-It's still a bit dense to get into, though - Specter would benefit greatly
-from something like the [Learn Datalog Today] [2] website!
+It's still a bit dense to get into, though — Specter would benefit greatly
+from something like the [Learn Datalog Today][2] website!
 
 
 [1]: https://github.com/nathanmarz/specter

@@ -24,7 +24,7 @@ applications. Once you have a REPL running, you can use methods provided by the 
 Spring beans and interact with them as you would with any other Java object. 
 
 If your Java application is anything like the ones I've seen, it probably provides a REST API of some
-sort and is most likely organized into different layers - Controllers, Services and so on. In addition
+sort and is most likely organized into different layers — Controllers, Services and so on. In addition
 to unit tests, I have often seen people using cURL or even a browser as the main tool for test-driving 
 the system, which of course means going through the Controller layer even if the thing we are interested 
 in is actually a piece of business logic in some deeper application layer. 
@@ -61,8 +61,7 @@ public NreplServerSpring repl() {
 This will launch an nREPL listening to port 1112 when the application is launched with the JVM option `-Dspring.profiles.active=dev`. 
 
 With the application running, you can then simply connect to the nREPL server with Leiningen or using whatever 
-Clojure development environment you otherwise use. I am a fan of [Cursive Clojure](https://cursiveclojure.com/), the Clojure plugin for IntelliJ IDEA - 
-if you have Cursive installed, you can use a Clojure REPL (Remote) launch configuration.
+Clojure development environment you otherwise use. 
 
 So far, so good. When you have a REPL open, the following will get you started:
 
@@ -122,7 +121,7 @@ for REPL exploration.
 ```
 
 As an example, we'll do some exploration of the [toy payment system](http://jstaffans.github.io/blog/2015/03/16/spring-boot.html) I wrote about in a previous blog post.
-Given a credit card number, the service will perform a charge of 1,000 €. There is however a subtle bug - the sum always seems to be close to 1,000 €, but never exactly 1,000 €.
+Given a credit card number, the service will perform a charge of 1,000 €. There is however a subtle bug — the sum always seems to be close to 1,000 €, but never exactly 1,000 €.
 We decide to explore the problem a bit by performing a series of payments using a test credit card number and plotting a histogram of the charged sums.
 
 As this is more involved than a few lines of code at the REPL, we'll save our work as a .clj file in a special folder: `src/exploration/clojure/visualise_payments.clj`. 
@@ -171,10 +170,10 @@ As this is more involved than a few lines of code at the REPL, we'll save our wo
 
 Loading this into the REPL will produce an Incanter chart (note that it often opens behind the currently open window, at least on OS X):
 
-![incanter chart](/assets/images/incanter.png)
+![incanter chart](/images/incanter.png)
 
 The sum seems to follow a Gaussian distribution around 1,000 EUR. We now know something more about the thing we are investigating 
-and can continue from here. This was of course a pretty trivial example - at [komoot](https://www.komoot.de), I have used a similar 
+and can continue from here. This was of course a pretty trivial example — at [komoot](https://www.komoot.de), I have used a similar 
 approach to investigate e.g. how many active users we have within different radiuses of city centers, only leveraging the application itself 
 and not trawling through database dumps.
 

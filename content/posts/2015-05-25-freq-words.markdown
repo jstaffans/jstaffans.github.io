@@ -20,7 +20,7 @@ development using ClojureScript. This article is the first in a series describin
 my successes and failures developing the application.
 
 I use React.js a lot a work, so I'm interested in trying out one of its ClojureScript
-wrappers - I decided to pick Reagent because its state management facilities seem simpler
+wrappers. I decided to pick Reagent because its state management facilities seem simpler
 than Om's. While I'm at it I'll try out [Boot](http://boot-clj.com) as well. Martin Klepsch,
 a friend from the Berlin Clojure meetup group, handily provides a [batteries-included
 template for ClojureScript development with Boot](https://github.com/martinklepsch/tenzing). 
@@ -107,7 +107,7 @@ mailing list](http://hoplon.discoursehosting.net/t/trying-to-create-a-boot-task-
           (core/commit!))))))
 ```
 
-This task only considers one file - the first `.scss` files that does not start with an underscore. When using Sass, files whose name start with an underscore are files that are included in another stylesheet (`src/scss/main.scss` handles all the includes in my case), so we do not need to consider them separately.
+This task only considers one file (the first `.scss` files that does not start with an underscore). When using Sass, files whose name start with an underscore are files that are included in another stylesheet (`src/scss/main.scss` handles all the includes in my case), so we do not need to consider them separately.
 
 To make the task find the Sass sources, we need to add the relevant directory to
 the `:source-paths` key in the Boot environment:

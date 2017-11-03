@@ -32,7 +32,7 @@ only the first few executions that are very slow.
 
 Another limitation that one might hit is the 50 Mb size limit of the deployment artifact.
 50 Mb might seem like a lot, but you can quickly reach that limit if you're not careful
-about avoiding pulling in heavy dependencies in your project. [Amazonica] [1] is an 
+about avoiding pulling in heavy dependencies in your project. [Amazonica][1] is an 
 example of a library that has a lot of transient dependencies. Liberal use
 of `:exclusions` in the `:dependencies` section of your Leiningen project file helps:
 
@@ -50,7 +50,7 @@ its (IAM) execution role whereas RDS access is security group- and therefore
 IP-address-based. The IP address of a Lambda executor is not known to the user,
 so you would have to open up access to large chunks (the whole published AWS 
 IP range, essentially) to grant access to a Lambda function. Addressing this limitation seems to at least
-be [on the AWS Lambda roadmap] [2], but no dates have been given yet. 
+be [on the AWS Lambda roadmap][2], but no dates have been given yet. 
 
 ### Practical issues
 
@@ -63,7 +63,7 @@ function. Lower than that and the function would simply hang and time out.
 
 Since Lambda is somewhat of a black box execution environment, **logging** is crucial.
 Logs can be found in CloudWatch, but you have to remember to give the function
-an execution IAM role that is authorized to create log streams - the [docs] [3] have 
+an execution IAM role that is authorized to create log streams - the [docs][3] have 
 more to say on that.
 
 Your application will probably also need some **configuration**, maybe in the form
@@ -74,7 +74,7 @@ more creative.
 
 Usually, some setup that makes local development easy and while avoiding placing 
 sensitive values in the source-code repository is a good way to go and I ended
-up using the [immuconf] [4] library in combination with an S3 bucket. The blueprint
+up using the [immuconf][4] library in combination with an S3 bucket. The blueprint
 for the configuration is a checked-in `resources/config.edn` file, which can be 
 overridden by both a file in an S3 bucket and a file that is available only locally:
 
@@ -119,7 +119,7 @@ Lambda functions are versatile in that they can be triggered by almost any type 
 in the AWS universe. I opted for subscribing to an SNS topic, but you can also trigger 
 functions based on for example changes in an S3 bucket or updates to a DynamoDB table.
 
-The [lambada] [5] library provides the necessary plumbing for actually executing your 
+The [lambada][5] library provides the necessary plumbing for actually executing your 
 function in response to an AWS event. 
 
 ### Conclusion 

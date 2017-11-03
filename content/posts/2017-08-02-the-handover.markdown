@@ -8,16 +8,16 @@ tags:   [agile, teamwork, part-time teams]
 The usual wisdom in software development is that a co-located team made up 
 of full-time developers working together on a single project will perform best.
 But how many teams are there like that? I'd like to instead consider a team
-much more like the ones that I see around me - part-time team members, often
+much more like the ones that I see around me — part-time team members, often
 distributed, and working on multiple projects at once. What can a team like
 that do to improve its performance?
 
 To break things down a bit, let's look at the efforts of a software development
 team from three, somewhat arbitrary angles:
 
-* **Flow** - how steady is the progress of the team?
-* **Knowledge** - does everyone on the team know what they need to know in order to do their jobs?
-* **Process** - does the team strive to improve? Is its efforts supported by the rest of the organisation?
+* **Flow** — how steady is the progress of the team?
+* **Knowledge** — does everyone on the team know what they need to know in order to do their jobs?
+* **Process** — does the team strive to improve? Is its efforts supported by the rest of the organisation?
 
 ### Flow
 
@@ -88,7 +88,7 @@ Metrics gathering (how often do users reset passwords?)
 
 ```
 
-It's also important to keep the pull request focused on the story at hand - it is all too easy
+It's also important to keep the pull request focused on the story at hand because it is all too easy
 to get caught up in unrelated, small fixes and refactorings when implementing a story. **If something
 doesn't relate directly to the task at hand it should be in a separate pull request!** I'd suggest 
 getting friendly with Git rebasing and cherry-picking, because often you'll realise you're working 
@@ -126,7 +126,7 @@ the retrospective, and that some action will come out of it.
 One technique that we've found useful at the start of new projects is 
 **[mob programming](http://jstaffans.github.io/2017/02/15/mob-programming.html)**. 
 By building out the foundations of the project in a group setting, knowledge silos can be 
-avoided from the get-go. It's also a great way of getting to know your team mates better - 
+avoided from the get-go. It's also a great way of getting to know your team mates better —
 after all, you're going to rely on them heavily!
 
 ## Conclusion
@@ -135,7 +135,7 @@ Working in an interdependent fashion is part of what jells a team together. For 
 consisting mostly of part-time engineers, interdependency often comes in the form of 
 handovers. Instead of dumping a PR as a hot potato in your teammate's lap, spend a little
 bit of time communicating what needs to done, what parts are already in place, what can
-be done later and so on -- your teammates will thank you for it! Promote co-ownership
+be done later and so on — your teammates will thank you for it! Promote co-ownership
 of the code, so that no part of it is known and understood only by a single team member.
 
 

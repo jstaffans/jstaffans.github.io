@@ -9,9 +9,9 @@ Last week, my team and I had the need to re-focus our priorities and put our joi
 into pushing a new project forward. Traditionally, we have had a bit of work segregation going
 on with individuals and pairs working on smaller sub-projects, but the business now needed
 something different. Since we were all going to work on the same thing, which was new to most
-of us, we decided that doing a few days of [mob programming] [] would be a good way to kick things off.
+of us, we decided that doing a few days of [mob programming][] would be a good way to kick things off.
 
-Mob programming is a concept that none of us had any prior experience with -- I had heard about
+Mob programming is a concept that none of us had any prior experience with — I had heard about
 it in passing, but that was about it. We are however used to working in pairs and have a pretty
 well-functioning team without any derailers, which made things a lot easier. 
 
@@ -25,7 +25,7 @@ setup issues early on.
 
 Just as important as getting ahead with the engineering effort itself was what it did for
 team morale. I think that a hallmark of an effective team is that its members work in an
-interdependent fashion - in such a setting, each individual is aware of the other team members' 
+interdependent fashion — in such a setting, each individual is aware of the other team members' 
 areas of expertise and skillset and rely upon the support of colleagues to effectively complete 
 their tasks¹. Both mob and pair programming foster collaboration and mutual learning.
 
@@ -42,7 +42,7 @@ We used a timer to ping us to rotate the "driver" every twenty minutes.
 
 The project was new, but still based on some previous work that had been going on within the 
 company as well as on extensive research that had been done previously by an individual on 
-the team. We started things off by **setting an agenda for the day**-- present the research and 
+the team. We started things off by **setting an agenda for the day** — present the research and 
 previous art, determine some initial high-level requirements, identify technical risks and so on. 
 We quickly decided that we would **not** do any programming the first day, so we didn't do any 
 driver rotation either. One team member just acted as a secretary and took down notes in a shared 
@@ -53,7 +53,7 @@ really well towards building up understanding for the problem domain.
 
 ## Day two
 
-In the morning, we set up a goal for the day -- to get a basic project setup running and deployed
+In the morning, we set up a goal for the day — to get a basic project setup running and deployed
 on AWS. We chose a Python/Django-based backend because of familiarity with that stack, but included
 more modern, Webpack-based frontend asset tooling than what usually comes with Django (we anticipate 
 the need to move to a single-page application soon-ish, and Django's own static asset handling isn't 
@@ -62,10 +62,10 @@ very modern or flexible).
 As we started programming, it didn't take long for suggestions for key combinations, shortcuts
 and terminal tricks started flying through the room. The driver usually didn't contribute much 
 to the discussion, instead just acting as the conduit for typing things out. We frequently paused 
-in order for the driver to explain something he had just done, though - there were frequent comments 
+in order for the driver to explain something he had just done, though — there were frequent comments 
 along the line of "I had no idea you could do that with PyCharm!". 
 
-By the end of the day, we had reached our goal -- a service running on AWS, with everything up and
+By the end of the day, we had reached our goal — a service running on AWS, with everything up and
 ready for real implementation work to commence the following day. 
 
 ## Day three
@@ -89,7 +89,7 @@ each others' minds!
 
 We achieved our goal and did a short retrospective about the experience doing mob programming.
 Everyone was very happy with the experience. One team member suggested that the mob programming 
-format should be the *default* from now on -- we split up only if we really have to! 
+format should be the *default* from now on and we should split up only if we really have to! 
 
 ## Conclusion
 
