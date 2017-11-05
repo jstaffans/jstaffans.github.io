@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"><meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"><meta content="Johannes Staffans" itemprop="author" name="author"><title>Johannes Staffans - Spicing up Java projects with Clojure</title><link href="https://fonts.googleapis.com/css?family=Merriweather:400,700|Open+Sans:400,700" rel="stylesheet"><link href="/styles/main.css" rel="stylesheet" type="text/css"></head><div><div class="header"><div class="header__content clearfix"><div class="sm-col sm-col-8"><div>personal website and blog of</div><h1 class="header__headline"><a href="/">Johannes Staffans</a></h1></div><div class="sm-col flex-column"><div><a href="/">posts</a><span> &middot; </span><a href="/pages/about.html">about</a></div><div class="pt1">elsewhere</div><div><a href="https://github.com/jstaffans">github</a><span> &middot; </span><a href="https://www.linkedin.com/in/jstaffans">linkedin</a><span> &middot; </span><a href="https://twitter.com/jstaffans">@jstaffans</a></div></div></div><div class="clearfix"><svg class="left border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="0,15 30,0 30,30"></polygon></svg><svg class="right border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="30,15 0,30 0,0"></polygon></svg></div></div><div class="container"><div><div class="flex items-baseline justify-between"><h2>Spicing up Java projects with Clojure</h2><div><span>21.05.2015</span></div></div><div><p>Many engineers with an interest in Clojure are probably working on Java code bases for most of the day. This doesn't have to be the end of the world if you're tickling to write some Clojure code, as there are many ways of bringing Clojure to existing Java-based projects.</p>
+<p>You can opt to build parts of the system separately using Clojure, providing a JAR file that can be used in the main project. It's even relatively straight-forward to write Clojure namespaces alongside the Java packages and do Java-Clojure interop. But there are also some subtler ways of using Clojure with legacy Java code bases. One of those is adding a REPL to your Java application and using it to do REPL-based testing and exploration with Clojure.</p>
+<h3><a href="#jvm-break-glass-driving-spring-with-clojure" id="jvm-break-glass-driving-spring-with-clojure"></a>JVM Break Glass: driving Spring with Clojure</h3>
+<p>An excellent place to start is the <a href="https://github.com/matlux/jvm-breakglass">JVM Break Glass library</a>. The purpose of this library is to provide REPL facilities for traditional enterprise Java applications. It works especially well for Spring-based applications. Once you have a REPL running, you can use methods provided by the library to fetch Spring beans and interact with them as you would with any other Java object.</p>
+<p>If your Java application is anything like the ones I've seen, it probably provides a REST API of some sort and is most likely organized into different layers — Controllers, Services and so on. In addition to unit tests, I have often seen people using cURL or even a browser as the main tool for test-driving the system, which of course means going through the Controller layer even if the thing we are interested in is actually a piece of business logic in some deeper application layer.</p>
+<p>Being able to play around with beans in the Service layer directly in a running system is a way of focusing exactly on the thing you're interested in and iterating rapidly. This is second nature to Clojurists who do REPL-driven programming all the time, but almost magical to most Java programmers.</p>
+<h4><a href="#getting-started" id="getting-started"></a>Getting started</h4>
+<p>First add the JVM Break Glass library as a dependency to your project:</p>
+<pre><code class="highlight"><span></span><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>net.matlux<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>jvm-breakglass<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.0.8<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre>
+<p>Spring then needs to be configured to launch the REPL when the application starts. In this example, we are only interested in having a REPL during local development and not in production, which we can achieve using Spring profiles:</p>
+<pre><code class="highlight"><span></span><span class="nd">@Bean</span>
+<span class="nd">@Profile</span><span class="o">(</span><span class="s">"dev"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">NreplServerSpring</span> <span class="nf">repl</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">NreplServerSpring</span><span class="o">(</span><span class="mi">1112</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+<p>This will launch an nREPL listening to port 1112 when the application is launched with the JVM option <code>-Dspring.profiles.active=dev</code>.</p>
+<p>With the application running, you can then simply connect to the nREPL server with Leiningen or using whatever Clojure development environment you otherwise use.</p>
+<p>So far, so good. When you have a REPL open, the following will get you started:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">use</span> <span class="ss">'cl-java-introspector.spring</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">use</span> <span class="ss">'cl-java-introspector.core</span><span class="p">)</span>
+<span class="nv">=&gt;</span> <span class="nv">nil</span>
+</code></pre>
+<p>After that, start looking for your beans and play around!</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nb">filter </span><span class="o">#</span><span class="p">(</span><span class="nf">.contains</span> <span class="nv">%</span> <span class="s">"Service"</span><span class="p">)</span> <span class="p">(</span><span class="nf">get-beans</span><span class="p">))</span>
+<span class="nv">=&gt;</span> <span class="p">(</span><span class="s">"paymentService"</span> <span class="s">"reportingService"</span><span class="p">)</span>
+<span class="p">(</span><span class="k">def </span><span class="nv">reporting-service</span> <span class="p">(</span><span class="nf">get-bean</span> <span class="s">"reportingService"</span><span class="p">))</span>
+<span class="nv">=&gt;</span> <span class="o">#</span><span class="ss">'user/reporting-service</span>
+<span class="p">(</span><span class="nf">methods-info</span> <span class="nv">reporting-service</span><span class="p">)</span>
+<span class="nv">...</span>
+<span class="p">(</span><span class="nf">.getPayments</span> <span class="nv">reporting-service</span><span class="p">)</span>
+<span class="nv">=&gt;</span> <span class="p">[]</span>  <span class="c1">; no payments yet!</span>
+</code></pre>
+<p>This is already quite powerful for exploring APIs, driving Service layer beans and so on. The <a href="https://github.com/matlux/jvm-breakglass">JVM Break Glass project page</a> has some other examples of what is possible using the REPL. But besides pure exploration, there are lots more things you can do once you have an nREPL hook into your project.</p>
+<h4><a href="#data-visualisations-with-incanter" id="data-visualisations-with-incanter"></a>Data visualisations with Incanter</h4>
+<p>One way of leveraging Clojure in Java projects is taking advantage of its impressive data processing and analysis capabilities. I recommend the <a href="https://www.packtpub.com/big-data-and-business-intelligence/clojure-data-analysis-cookbook">Clojure Data Analysis Cookbook</a> for anyone interested in learning more about patterns for data crunching in Clojure. Here, we'll take a look at how to visualise data using the <a href="http://incanter.org/">Incanter</a> library.</p>
+<p>I think visualising data flowing through a live application is one of the best ways of gaining deeper understanding into how the application works. Of course, everything we do here can also be accomplished by logging data and using an external data analysis application, but being able to do it directly in the application brings a whole different level of interactivity to the table.</p>
+<p>First, we'll add one more dependency to our project:</p>
+<pre><code class="highlight"><span></span><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>im.chit<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>vinyasa<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.3.4<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre>
+<p>The <a href="https://github.com/zcaudate/vinyasa">vinyasa library</a> provides a kind of toolbelt for REPL-driven development in Clojure. One of the tools included is a utility called <a href="https://github.com/zcaudate/vinyasa#pull">pull</a>. Using this function, Maven dependencies can be pulled in directly from the REPL, without the need for adding dependencies to your project. More importantly, there is no need to restart anything, which makes it perfect for REPL exploration.</p>
+<pre><code class="highlight"><span></span><span class="c1">; This will take a long time the first time you do it because </span>
+<span class="c1">; incanter has lots of dependencies. After that, the dependencies </span>
+<span class="c1">; will be cached in your local Maven repository. </span>
+<span class="p">(</span><span class="nf">pull</span> <span class="ss">'incanter</span><span class="p">)</span>
+<span class="nv">=&gt;</span> <span class="c1">; lots of dependencies ...</span>
+</code></pre>
+<p>As an example, we'll do some exploration of the <a href="http://jstaffans.github.io/blog/2015/03/16/spring-boot.html">toy payment system</a> I wrote about in a previous blog post. Given a credit card number, the service will perform a charge of 1,000 €. There is however a subtle bug — the sum always seems to be close to 1,000 €, but never exactly 1,000 €. We decide to explore the problem a bit by performing a series of payments using a test credit card number and plotting a histogram of the charged sums.</p>
+<p>As this is more involved than a few lines of code at the REPL, we'll save our work as a .clj file in a special folder: <code>src/exploration/clojure/visualise_payments.clj</code>.</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">visualise-payments</span>
+ <span class="p">(</span><span class="ss">:require</span>
+  <span class="p">[</span><span class="nv">cl-java-introspector.spring</span> <span class="ss">:refer</span> <span class="ss">:all</span><span class="p">]</span>
+  <span class="p">[</span><span class="nv">cl-java-introspector.core</span> <span class="ss">:refer</span> <span class="ss">:all</span><span class="p">]</span>
+  <span class="p">[</span><span class="nv">vinyasa.pull</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">pull</span><span class="p">]]))</span>
+
+<span class="c1">; Get the Spring service bean we want to test drive</span>
+<span class="p">(</span><span class="k">def </span><span class="nv">paymentService</span> <span class="p">(</span><span class="nf">get-bean</span> <span class="s">"paymentService"</span><span class="p">))</span>
+
+<span class="c1">; Helpers for working with RxJava observables and Java beans</span>
+<span class="p">(</span><span class="kd">defn- </span><span class="nv">result-from-observable</span>
+  <span class="p">[</span><span class="nv">observable</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">.first</span> <span class="p">(</span><span class="nf">.toBlocking</span> <span class="nv">observable</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="kd">defn- </span><span class="nv">sum-from-result</span>
+  <span class="p">[</span><span class="nv">result</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">.getSum</span> <span class="p">(</span><span class="nf">.getPayment</span> <span class="nv">result</span><span class="p">)))</span>
+
+<span class="c1">; create a sequence of test payments </span>
+<span class="p">(</span><span class="kd">defn- </span><span class="nv">do-test-payments</span>
+  <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">letfn</span> <span class="p">[(</span><span class="nf">pay</span> <span class="p">[</span><span class="nv">cc-number</span><span class="p">]</span>
+            <span class="p">(</span><span class="nf">result-from-observable</span> <span class="p">(</span><span class="nf">.doPayment</span> <span class="nv">paymentService</span> <span class="nv">cc-number</span><span class="p">)))]</span>
+    <span class="p">(</span><span class="nb">map </span><span class="nv">pay</span> <span class="p">(</span><span class="nb">repeat </span><span class="nv">n</span> <span class="s">"TEST_NUMBER"</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">payments</span> <span class="p">(</span><span class="nf">do-test-payments</span> <span class="mi">500</span><span class="p">))</span>
+
+<span class="c1">; Pull Incanter dependency for data analysis and graphs</span>
+<span class="p">(</span><span class="nf">pull</span> <span class="ss">'incanter</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nf">require</span>
+ <span class="o">'</span><span class="p">[</span><span class="nv">incanter.core</span> <span class="ss">:as</span> <span class="nv">i</span><span class="p">]</span>
+ <span class="o">'</span><span class="p">[</span><span class="nv">incanter.charts</span> <span class="ss">:as</span> <span class="nv">c</span><span class="p">])</span>
+
+<span class="c1">; pull statuses and sums into an Incanter dataset</span>
+<span class="p">(</span><span class="k">def </span><span class="nv">payments-dataset</span> <span class="p">(</span><span class="nf">i/dataset</span> <span class="p">[</span><span class="ss">:status</span> <span class="ss">:sum</span><span class="p">]</span> <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="nf">juxt</span> <span class="ss">:status</span> <span class="nv">sum-from-result</span><span class="p">)</span> <span class="nv">payments</span><span class="p">)))</span>
+
+<span class="c1">; plot a histogram with the sums</span>
+<span class="p">(</span><span class="nf">i/view</span> <span class="p">(</span><span class="nf">c/histogram</span> <span class="p">(</span><span class="nf">i/sel</span> <span class="nv">payments-dataset</span> <span class="ss">:cols</span> <span class="ss">:sum</span><span class="p">)</span> <span class="ss">:nbins</span> <span class="mi">20</span><span class="p">))</span>
+</code></pre>
+<p>Loading this into the REPL will produce an Incanter chart (note that it often opens behind the currently open window, at least on OS X):</p>
+<p><img src="/images/incanter.png" alt="incanter chart" /></p>
+<p>The sum seems to follow a Gaussian distribution around 1,000 EUR. We now know something more about the thing we are investigating and can continue from here. This was of course a pretty trivial example — at <a href="https://www.komoot.de">komoot</a>, I have used a similar approach to investigate e.g. how many active users we have within different radiuses of city centers, only leveraging the application itself and not trawling through database dumps.</p>
+<p><strong>Note: make sure that the application is started with <code>-Djava.awt.headless=false</code>, otherwise opening graphics windows with Incanter won't work! Headless mode seems to be the default at least using IntelliJ IDEA.</strong></p>
+<h4><a href="#sample-project" id="sample-project"></a>Sample project</h4>
+<p>Have a look at a <a href="https://github.com/jstaffans/pay-me-spring-boot">sample project on Github</a>.</p>
+<h3><a href="#other-uses-of-clojure-in-java-applications" id="other-uses-of-clojure-in-java-applications"></a>Other uses of Clojure in Java applications</h3>
+<p>We have barely scratched the surface of the potential Clojure has for Java applications. Another area in which I have had success is for example property testing using <a href="https://github.com/clojure/test.check">test.check</a>. Testing in general is a good avenue for bringing Clojure into Java projects.</p>
+<p>We didn't really talk about doing REPL-driven development in this article, only about exploring an existing Java application using Clojure. You can definitely do REPL-driven development too, if you use a tool like <a href="http://zeroturnaround.com/software/jrebel/">JRebel</a> that is capable of advanced code hot-swapping. It's not as nice as namespace reloading in Clojure, but pretty close!</p>
+</div><div><a href="/">Back</a></div></div></div><div class="footer"><p>&copy; 2015-2017 Johannes Staffans</p></div></div></html>

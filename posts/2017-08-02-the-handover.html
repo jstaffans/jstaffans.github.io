@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"><meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"><meta content="Johannes Staffans" itemprop="author" name="author"><title>Johannes Staffans - The handover</title><link href="https://fonts.googleapis.com/css?family=Merriweather:400,700|Open+Sans:400,700" rel="stylesheet"><link href="/styles/main.css" rel="stylesheet" type="text/css"></head><div><div class="header"><div class="header__content clearfix"><div class="sm-col sm-col-8"><div>personal website and blog of</div><h1 class="header__headline"><a href="/">Johannes Staffans</a></h1></div><div class="sm-col flex-column"><div><a href="/">posts</a><span> &middot; </span><a href="/pages/about.html">about</a></div><div class="pt1">elsewhere</div><div><a href="https://github.com/jstaffans">github</a><span> &middot; </span><a href="https://www.linkedin.com/in/jstaffans">linkedin</a><span> &middot; </span><a href="https://twitter.com/jstaffans">@jstaffans</a></div></div></div><div class="clearfix"><svg class="left border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="0,15 30,0 30,30"></polygon></svg><svg class="right border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="30,15 0,30 0,0"></polygon></svg></div></div><div class="container"><div><div class="flex items-baseline justify-between"><h2>The handover</h2><div><span>08.09.2017</span></div></div><div><p>The usual wisdom in software development is that a co-located team made up of full-time developers working together on a single project will perform best. But how many teams are there like that? I'd like to instead consider a team much more like the ones that I see around me — part-time team members, often distributed, and working on multiple projects at once. What can a team like that do to improve its performance?</p>
+<p>To break things down a bit, let's look at the efforts of a software development team from three, somewhat arbitrary angles:</p>
+<ul>
+<li><strong>Flow</strong> — how steady is the progress of the team?</li>
+<li><strong>Knowledge</strong> — does everyone on the team know what they need to know in order to do their jobs?</li>
+<li><strong>Process</strong> — does the team strive to improve? Is its efforts supported by the rest of the organisation?</li>
+</ul>
+<h3><a href="#flow" id="flow"></a>Flow</h3>
+<p>Both for individual developers and for the team as a whole, getting into the "zone" and achieving a steady flow is important. Unfortunately, there are all too many ways for the flow to be disturbed.</p>
+<p>For the individual developer, not knowing what the next task is is for example a sure way of breaking the flow, as is being interrupted by unnecessary notifications or people stopping by with requests or questions.</p>
+<p>On a project level, let's assume we're doing something like Scrum or Kanban and consider the flow of issues (let's call them stories) from the Product Backlog through whatever "In Progress" columns there may be to a final "Done" state. A steady flow here would mean that a story spends only a <strong>short amount of time in every state</strong>, rapidly moving from one state to the next as it is being worked on.</p>
+<p>What if a developer, who has Thursday and Friday off, picks up a story on Wednesday morning? Depending on the effort involved, there might be some hope of finishing it the same day. Usually, though, squeezing design, implementation and code review into a single day rarely works. So probably it'll take until the following week, when the engineer is back at work, before the story can be finished. During the days that the developer is away, the story remains in limbo.</p>
+<p>Recognising this as a problem, the developer would do best not to pick up any stories on his or her own the day before leaving, but instead <strong>pair up</strong> with another engineer. This is often the best way of ensuring smooth progress of a task.</p>
+<p>If pairing is not an option, there needs to be a <strong>handover</strong>. On my team, the developer who started the work on any given story is expected to open a <strong>work-in-progress pull request</strong> and add detailed information about the state of the implementation:</p>
+<ul>
+<li>High-level description</li>
+<li>Free-form text is good</li>
+<li>Bullet points are better</li>
+<li>References to further descriptions and acceptance criteria (e.g. a link to an issue in your issue tracker)</li>
+<li>Detailed todo list in the form of checkboxes, including items that have already been implemented</li>
+<li>How-to-test instructions, screenshots, animated GIFs displaying UI behavior</li>
+<li>Any technical debt incurred or items that need to be postponed</li>
+</ul>
+<p>An example of a handover-friendly pull request would be:</p>
+<pre><code>Add password reminder functionality
+===================================
+
+Widget where user can enter a registered e-mail address and press 'Reset password'.
+The user will receive an e-mail. See [JIRA link], UI mockups [here].
+
+## TODO
+
+- [x] Backend (password reset API route, validation)
+- [x] Frontend routes
+- [x] Frontend component: enter e-mail
+- [ ] Frontend component: landing page
+- [ ] Error handling
+- [ ] Mail template
+- [ ] Mail sending
+- [ ] Integration test
+
+## How to test
+
+Open browser to http://localhost:8000/reset-password, enter registered e-mail address. 
+
+## Later
+
+Metrics gathering (how often do users reset passwords?)
+
+</code></pre>
+<p>It's also important to keep the pull request focused on the story at hand because it is all too easy to get caught up in unrelated, small fixes and refactorings when implementing a story. <strong>If something doesn't relate directly to the task at hand it should be in a separate pull request!</strong> I'd suggest getting friendly with Git rebasing and cherry-picking, because often you'll realise you're working on something unrelated only when your halfway done with it.</p>
+<h3><a href="#knowledge" id="knowledge"></a>Knowledge</h3>
+<p>On a team where handovers are frequent, you cannot have knowledge silos, because that will put a limit on who work can be handed over to. We've applied several strategies to avoid knowledge silos:</p>
+<ul>
+<li>For devops work, we rely heavily on the principle of <strong>"infrastructure as code"</strong>. All our cloud resources are for example documented in templates like CloudFormation or Terraform, and deployments are scripted.</li>
+<li>Cross-code-reviewing: request review from an engineer that is not too familiar with the area of the system your code touches and take the opportunity to explain it in more detail.</li>
+<li>Treat documentation as a first-class citizen.</li>
+<li>Lots of pairing and design discussions.</li>
+</ul>
+<p>Besides knowledge about the system the team is building, team members also need to be on the same page with regards to the development process and the interfaces to the rest of the organisation. If for example a new staging system is set up, team members need to know its purpose and how to deploy it. If an important customer demo is coming up, the team might need to know not to mess with a particular test system, and so forth. Our solution is to have a <strong>dedicated <code>#announcements</code> Slack channel</strong>, which is only for important updates and where discussion on those topics is forbidden (we have other channels for that). A team member coming back from a few days off can quickly scan this channel to get up to speed.</p>
+<h3><a href="#process" id="process"></a>Process</h3>
+<p>A <strong>working retrospective practice</strong> is important for the team to be able to improve. In our case, the retrospective, which we do at two-week intervals, is one of the few times that all team members meet in the same room. We try very hard to keep the discussion focused on things that are actionable to us, and not surprisingly, we've come to see the handover as one of the most important things to "get right". If a handover goes badly for some reason, we can be sure that it will be discussed in the retrospective, and that some action will come out of it.</p>
+<p>One technique that we've found useful at the start of new projects is <strong><a href="http://jstaffans.github.io/2017/02/15/mob-programming.html">mob programming</a></strong>. By building out the foundations of the project in a group setting, knowledge silos can be avoided from the get-go. It's also a great way of getting to know your team mates better — after all, you're going to rely on them heavily!</p>
+<h2><a href="#conclusion" id="conclusion"></a>Conclusion</h2>
+<p>Working in an interdependent fashion is part of what jells a team together. For a team consisting mostly of part-time engineers, interdependency often comes in the form of handovers. Instead of dumping a PR as a hot potato in your teammate's lap, spend a little bit of time communicating what needs to done, what parts are already in place, what can be done later and so on — your teammates will thank you for it! Promote co-ownership of the code, so that no part of it is known and understood only by a single team member.</p>
+</div><div><a href="/">Back</a></div></div></div><div class="footer"><p>&copy; 2015-2017 Johannes Staffans</p></div></div></html>

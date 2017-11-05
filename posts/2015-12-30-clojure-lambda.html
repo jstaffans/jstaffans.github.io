@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"><meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"><meta content="Johannes Staffans" itemprop="author" name="author"><title>Johannes Staffans - A look at running Clojure on AWS Lambda</title><link href="https://fonts.googleapis.com/css?family=Merriweather:400,700|Open+Sans:400,700" rel="stylesheet"><link href="/styles/main.css" rel="stylesheet" type="text/css"></head><div><div class="header"><div class="header__content clearfix"><div class="sm-col sm-col-8"><div>personal website and blog of</div><h1 class="header__headline"><a href="/">Johannes Staffans</a></h1></div><div class="sm-col flex-column"><div><a href="/">posts</a><span> &middot; </span><a href="/pages/about.html">about</a></div><div class="pt1">elsewhere</div><div><a href="https://github.com/jstaffans">github</a><span> &middot; </span><a href="https://www.linkedin.com/in/jstaffans">linkedin</a><span> &middot; </span><a href="https://twitter.com/jstaffans">@jstaffans</a></div></div></div><div class="clearfix"><svg class="left border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="0,15 30,0 30,30"></polygon></svg><svg class="right border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="30,15 0,30 0,0"></polygon></svg></div></div><div class="container"><div><div class="flex items-baseline justify-between"><h2>A look at running Clojure on AWS Lambda</h2><div><span>30.12.2015</span></div></div><div><p>Lambda is the name of the serverless function execution service that has been part of the Amazon Web Services ecosystem since late 2014. The evolution of the Lamba service has been quite rapid during the last year, with one of the recent additions being support for execution of Java code. And as we know, where there's Java, there can be Clojure, so during a recent project I decided to implement some of the backend parts using the AWS Lambda service.</p>
+<h3><a href="#advantages" id="advantages"></a>Advantages</h3>
+<p>The obvious advantage of using Lambda is that you do not have to worry about server infrastructure, instead you are just deploying a function and letting AWS worry about scaling and so on. I think that having the function be the unit of deployment is a natural step to take when doing functional programming. Clojure of course works splendidly in this setting.</p>
+<h3><a href="#limitations" id="limitations"></a>Limitations</h3>
+<p>One well-known limitation of running Clojure on AWS Lambda is the JVM startup time. This is a serious problem for an application that requires fast responses. In this case, you can still use ClojureScript running on Node.js, which is another execution environment that Lambda supports. If, like me, you can tolerate function executions that are sometimes very slow, Clojure works just fine. Lambda will also generally run subsequent invocations of your function using the same, warmed-up JVMs, so it's usually only the first few executions that are very slow.</p>
+<p>Another limitation that one might hit is the 50 Mb size limit of the deployment artifact. 50 Mb might seem like a lot, but you can quickly reach that limit if you're not careful about avoiding pulling in heavy dependencies in your project. <a href="https://github.com/mcohen01/amazonica">Amazonica</a> is an example of a library that has a lot of transient dependencies. Liberal use of <code>:exclusions</code> in the <code>:dependencies</code> section of your Leiningen project file helps:</p>
+<pre><code class="highlight"><span></span><span class="ss">:dependencies</span> <span class="p">[[</span><span class="nv">amazonica</span> <span class="s">"0.3.39"</span> 
+                <span class="ss">:exclusions</span> <span class="p">[</span><span class="nv">com.amazonaws/aws-java-sdk-datapipeline</span>
+                             <span class="nv">com.amazonaws/aws-java-sdk-devicefarm</span>
+                             <span class="nv">...</span><span class="p">]</span>
+</code></pre>
+<p>One serious limitation that isn't immediately obvious is that Lambda functions have no way to communicate with private RDS databases. This is because permissions are granted to a Lambda function based on its (IAM) execution role whereas RDS access is security group- and therefore IP-address-based. The IP address of a Lambda executor is not known to the user, so you would have to open up access to large chunks (the whole published AWS IP range, essentially) to grant access to a Lambda function. Addressing this limitation seems to at least be <a href="https://forums.aws.amazon.com/thread.jspa?threadID=166946&amp;start=25&amp;tstart=0">on the AWS Lambda roadmap</a>, but no dates have been given yet.</p>
+<h3><a href="#practical-issues" id="practical-issues"></a>Practical issues</h3>
+<p><strong>Deployment</strong> to AWS Lambda requires some command-line magic - I created a Jenkins job that runs Leiningen, tests the code and deploys a new version to Lambda. There are some things that need configuring, mainly how much memory to reserve for the function (this correlates directly with how much you pay per function invocation as well). I found 384 Mb to be the lowest possible amount for my relatively simple data-crunching function. Lower than that and the function would simply hang and time out.</p>
+<p>Since Lambda is somewhat of a black box execution environment, <strong>logging</strong> is crucial. Logs can be found in CloudWatch, but you have to remember to give the function an execution IAM role that is authorized to create log streams - the <a href="http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role">docs</a> have more to say on that.</p>
+<p>Your application will probably also need some <strong>configuration</strong>, maybe in the form of an API key or threadpool settings (yes, threadpools are fine to use with Lambda). Lambda unfortunately lacks support for environment variables similar to what other AWS deployment tools like Elastic Beanstalk and OpsWorks have, so you have to get a bit more creative.</p>
+<p>Usually, some setup that makes local development easy and while avoiding placing sensitive values in the source-code repository is a good way to go and I ended up using the <a href="https://github.com/levand/immuconf">immuconf</a> library in combination with an S3 bucket. The blueprint for the configuration is a checked-in <code>resources/config.edn</code> file, which can be overridden by both a file in an S3 bucket and a file that is available only locally:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">lambda-example.config</span>
+  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojure.java.io</span> <span class="ss">:as</span> <span class="nv">io</span><span class="p">]</span>
+            <span class="p">[</span><span class="nv">amazonica.aws.s3</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">get-object</span><span class="p">]]</span>
+            <span class="p">[</span><span class="nv">immuconf.config</span> <span class="ss">:as</span> <span class="nv">conf</span><span class="p">]</span>
+            <span class="p">[</span><span class="nv">clojure.tools.logging</span> <span class="ss">:as</span> <span class="nv">log</span><span class="p">])</span>
+  <span class="p">(</span><span class="ss">:refer-clojure</span> <span class="ss">:exclude</span> <span class="p">[</span><span class="nv">get</span><span class="p">]))</span>
+
+<span class="p">(</span><span class="kd">defn- </span><span class="nv">base-config</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">io/resource</span> <span class="s">"config.edn"</span><span class="p">))</span>
+
+<span class="p">(</span><span class="kd">defn- </span><span class="nv">s3-config</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">try</span>
+    <span class="p">(</span><span class="ss">:input-stream</span>
+      <span class="p">(</span><span class="nf">get-object</span>
+        <span class="ss">:bucket-name</span> <span class="s">"my-config-bucket"</span>
+        <span class="ss">:key</span> <span class="s">"production/config.edn"</span><span class="p">))</span>
+    <span class="p">(</span><span class="nf">catch</span> <span class="nv">Exception</span> <span class="nv">_</span>
+      <span class="p">(</span><span class="nf">log/warn</span> <span class="s">"S3 config not available!"</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="kd">defn- </span><span class="nv">local-config</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nf">.exists</span> <span class="p">(</span><span class="nf">io/as-file</span> <span class="s">"local.edn"</span><span class="p">))</span> <span class="s">"local.edn"</span><span class="p">))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">config</span>
+  <span class="p">(</span><span class="nb">apply </span>
+    <span class="nv">conf/load</span> 
+    <span class="p">(</span><span class="nb">filter </span>
+      <span class="p">(</span><span class="nb">partial not= </span><span class="nv">nil</span><span class="p">)</span> 
+      <span class="p">[(</span><span class="nf">base-config</span><span class="p">)</span> <span class="p">(</span><span class="nf">s3-config</span><span class="p">)</span> <span class="p">(</span><span class="nf">local-config</span><span class="p">)])))</span>
+</code></pre>
+<h3><a href="#execution" id="execution"></a>Execution</h3>
+<p>Lambda functions are versatile in that they can be triggered by almost any type of event in the AWS universe. I opted for subscribing to an SNS topic, but you can also trigger functions based on for example changes in an S3 bucket or updates to a DynamoDB table.</p>
+<p>The <a href="https://github.com/uswitch/lambada">lambada</a> library provides the necessary plumbing for actually executing your function in response to an AWS event.</p>
+<h3><a href="#conclusion" id="conclusion"></a>Conclusion</h3>
+<p>AWS Lambda is a fun, versatile and cheap way of taking the functional programming paradigm one step further by having the function be the unit of deployment. Although there are some kinks such as the lack of environment variable support and restrictions with regards to RDS access, most problems can be worked around. The JVM startup time is a blocker for applications with real-time needs but not a problem for data-crunching background tasks.</p>
+</div><div><a href="/">Back</a></div></div></div><div class="footer"><p>&copy; 2015-2017 Johannes Staffans</p></div></div></html>

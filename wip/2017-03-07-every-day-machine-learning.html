@@ -1,0 +1,47 @@
+<p>The trend towards heavier use of machine learning seems to be as strong as ever. We often see references to well-known, successful implementations of machine learning, like AlphaGo or self-driving cars. But most of us work on projects far more mundane than those. Can we still employ machine learning techniques?</p>
+<p>The idea of this post is to brainstorm some potential ways of bringing machine learning into a convential web application project. I'll try to consider a few different categories of use cases:</p>
+<ul>
+<li>Dealing with data</li>
+<li>Reacting to events</li>
+<li>Making recommendations</li>
+</ul>
+<h2><a href="#dealing-with-data" id="dealing-with-data"></a>Dealing with data</h2>
+<h3><a href="#making-up-for-missing-labels" id="making-up-for-missing-labels"></a>Making up for missing labels</h3>
+<p>Imagine your application needs to work with user-generated data, perhaps in the form of Optical Character Recognition (OCR) extracts. Say for example a list of words representing the names of authors along with more words with other information about the author:</p>
+<pre><code>[
+  {"text": "Dan", "format": "bold", "row": 12, "position": 0, ...},
+  {"text": "Brown,", "format": "bold", "row": 12, "position": 5, ...},
+  {"text": "born", "position": 12, ...},
+  {"text": "August", "position": 17, ...},
+  ...
+  {"text": "Stephen", "format": "bold", "row": 29, "position": 0, ...},
+  {"text": "King,", "row": 29, "position": 9, ...},
+  {"text": "born", "row": 29, "position": 17, ...},
+  {"text": "September", "row" 29, "position": 22, ...},
+  ...
+]
+
+</code></pre>
+<p>From our domain knowledge, we know that the author name appears in bold, so to get the author names that appear in the data, it should be enough to filter out the bold words - right?</p>
+<p>It turns out that user-generated data is messy. In the piece of data above, the OCR process has missed that one of the words was bolded, for example.</p>
+<p>We can instead look at the boldness of the word as only one thing that identifies the author name. Others are, for example:</p>
+<ul>
+<li>Initial letter capitalized</li>
+<li>usually appears in beginning of row</li>
+<li>often occurs before the word "born"</li>
+<li>...</li>
+</ul>
+<p>We can then hand-pick a subset of data where we label the author names manually and train a <em>classification algorithm</em> like Naive Bayes or Support Vector Machine which tells us with pretty good confidence which words represent the names of authors.</p>
+<p><strong>Extrapolation:</strong> any text classification problem that needs to work with messy data.</p>
+<h3><a href="#finding-the-best-user-generated-content" id="finding-the-best-user-generated-content"></a>Finding the best user-generated content</h3>
+<h2><a href="#reacting-to-events" id="reacting-to-events"></a>Reacting to events</h2>
+<h3><a href="#example-1" id="example-1"></a>Example 1</h3>
+<h3><a href="#example-2" id="example-2"></a>Example 2</h3>
+<h2><a href="#making-recommendations" id="making-recommendations"></a>Making recommendations</h2>
+<p>Making recommendations to the user is probably the most well-known use case for machine learning algorithms. The canonical example is to suggest products to the user given what similar users have purchased. I'll try to think of a few other kinds of recommendations that we could use outside of the context of an online shop.</p>
+<h3><a href="#example-1" id="example-1"></a>Example 1</h3>
+<ul>
+<li>Recommending next level in game given user's results / proficiency / progress</li>
+</ul>
+<h3><a href="#example-2" id="example-2"></a>Example 2</h3>
+<h2><a href="#final-thoughts" id="final-thoughts"></a>Final thoughts</h2>

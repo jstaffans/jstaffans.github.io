@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"><meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"><meta content="Johannes Staffans" itemprop="author" name="author"><title>Johannes Staffans - freq-words: learn to read with ClojureScript</title><link href="https://fonts.googleapis.com/css?family=Merriweather:400,700|Open+Sans:400,700" rel="stylesheet"><link href="/styles/main.css" rel="stylesheet" type="text/css"></head><div><div class="header"><div class="header__content clearfix"><div class="sm-col sm-col-8"><div>personal website and blog of</div><h1 class="header__headline"><a href="/">Johannes Staffans</a></h1></div><div class="sm-col flex-column"><div><a href="/">posts</a><span> &middot; </span><a href="/pages/about.html">about</a></div><div class="pt1">elsewhere</div><div><a href="https://github.com/jstaffans">github</a><span> &middot; </span><a href="https://www.linkedin.com/in/jstaffans">linkedin</a><span> &middot; </span><a href="https://twitter.com/jstaffans">@jstaffans</a></div></div></div><div class="clearfix"><svg class="left border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="0,15 30,0 30,30"></polygon></svg><svg class="right border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="30,15 0,30 0,0"></polygon></svg></div></div><div class="container"><div><div class="flex items-baseline justify-between"><h2>freq-words: learn to read with ClojureScript</h2><div><span>25.05.2015</span></div></div><div><p>My father, a retired elementary school teacher, runs a <a href="http://www.kjellstaffans.fi">website</a> offering material for young children who are just starting to learn how to read and write in Swedish. A big portion of the material is geared towards children who experience difficulties learning the basics of reading and writing and one of the teaching aids is an <a href="http://www.kjellstaffans.fi/wp-content/uploads/frekord.html">old Flash application</a> I wrote almost a decade ago; children can use the application to practice reading some of the most common words in the Swedish language.</p>
+<p>I think it's time to give the application a make-over by way of modernising the UI and providing some frequently-asked-for features such as a timer and the possibility of saving high scores. I'll take the opportunity to learn some more about web application development using ClojureScript. This article is the first in a series describing my successes and failures developing the application.</p>
+<p>I use React.js a lot a work, so I'm interested in trying out one of its ClojureScript wrappers. I decided to pick Reagent because its state management facilities seem simpler than Om's. While I'm at it I'll try out <a href="http://boot-clj.com">Boot</a> as well. Martin Klepsch, a friend from the Berlin Clojure meetup group, handily provides a <a href="https://github.com/martinklepsch/tenzing">batteries-included template for ClojureScript development with Boot</a>. Thanks Martin!</p>
+<p>I'll use Cursive Clojure as my development environment and base my styles on Twitter Bootstrap. Sass is a must-have in my book so I'll try to integrate that as well.</p>
+<p>With the basic dependencies sorted out it's time to get started!</p>
+<h3><a href="#setting-up-the-project" id="setting-up-the-project"></a>Setting up the project</h3>
+<p>Setting up a new Boot+ClojureScript project is easy with Tenzing:</p>
+<pre><code class="highlight"><span></span>$&gt; lein new tenzing freq-words +reagent
+$&gt; <span class="nb">cd</span> freq-words
+$&gt; boot dev
+</code></pre>
+<p>Pointing a browser to <code>localhost:3000</code> now gives us a view of the basic default application.</p>
+<p>As I said earlier, I use Cursive (the Clojure/ClojureScript plugin for IntelliJ IDEA) as my development environment, which unfortunately does not integrate directly with Boot for the goodies like auto-completion and inline documentation that I'm used to. In order to get those working, I add a dummy <code>project.clj</code> file that Cursive can pick up, containing the application dependencies from <code>build.boot</code> file (I won't add any Boot-specific dependencies since I won't be changing the <code>build.boot</code> file that much):</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="kd">defproject </span><span class="nv">freq-words</span> <span class="s">"0.1.0-SNAPSHOT"</span>
+  <span class="ss">:description</span> <span class="s">"freq-words - project file for Cursive Clojure"</span>
+  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">"Eclipse Public License"</span>
+            <span class="ss">:url</span> <span class="s">"http://www.eclipse.org/legal/epl-v10.html"</span><span class="p">}</span>
+
+  <span class="ss">:dependencies</span> <span class="p">[[</span><span class="nv">reagent</span> <span class="s">"0.5.0"</span><span class="p">]])</span>
+</code></pre>
+<p>Cursive can now pick up the project's dependencies. I'll just have to remember to update both files if I add any third-party libraries.</p>
+<h4><a href="#my-first-boot-task-compiling-sass-files" id="my-first-boot-task-compiling-sass-files"></a>My first Boot task: compiling Sass files</h4>
+<p>I will base my layout on a free theme from Bootswatch, but will also most likely add some styles of my own. I think CSS gets tedious really fast so I prefer to use a higher-level language like Sass. Having downloaded the base theme as <code>src/scss/_bootstrap.scss</code>, I will add an <code>src/scss/main.scss</code> file as well where I include the base theme and can add any custom styles:</p>
+<pre><code class="highlight"><span></span><span class="k">@import</span> <span class="s">'bootstrap';</span>
+
+<span class="c1">// a little custom style</span>
+<span class="nc">.my-form</span> <span class="err">{</span>
+  <span class="na">background</span><span class="o">:</span> <span class="nb">blue</span><span class="err">;</span>
+<span class="err">}</span>
+</code></pre>
+<p>The challenge now is to add Sass compilation to the Boot build chain. A custom task does the trick (based on a conversation on the <a href="http://hoplon.discoursehosting.net/t/trying-to-create-a-boot-task-to-compile-sass-files/386">Hoplon mailing list</a>):</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">deftask</span> <span class="nv">sass</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">tmp</span> <span class="p">(</span><span class="nf">core/tmp-dir!</span><span class="p">)]</span>
+    <span class="p">(</span><span class="nf">core/with-pre-wrap</span> <span class="nv">fs</span> 
+      <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">in-files</span> <span class="p">(</span><span class="nf">core/input-files</span> <span class="nv">fs</span><span class="p">)</span>
+            <span class="nv">in-main</span> <span class="p">(</span><span class="nb">first </span><span class="p">(</span><span class="nf">core/by-re</span> <span class="p">[</span><span class="o">#</span><span class="s">"^(?!_).*\.scss"</span><span class="p">]</span> <span class="nv">in-files</span><span class="p">))</span>
+            <span class="nv">out-dir</span> <span class="p">(</span><span class="nf">io/file</span> <span class="nv">tmp</span> <span class="s">"stylesheets"</span><span class="p">)</span>
+            <span class="nv">out</span> <span class="p">(</span><span class="nf">io/file</span> <span class="nv">out-dir</span> <span class="s">"main.css"</span><span class="p">)]</span>
+        <span class="p">(</span><span class="nf">.mkdirs</span> <span class="nv">out-dir</span><span class="p">)</span>
+        <span class="p">(</span><span class="nf">util/dosh</span> <span class="s">"sassc"</span>
+          <span class="s">"--style"</span> <span class="s">"compressed"</span>
+          <span class="p">(</span><span class="nf">.getPath</span> <span class="p">(</span><span class="nf">core/tmp-file</span> <span class="nv">in-main</span><span class="p">))</span>
+          <span class="p">(</span><span class="nf">.getPath</span> <span class="nv">out</span><span class="p">))</span>
+        <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">fs</span>
+          <span class="p">(</span><span class="nf">core/add-resource</span> <span class="nv">tmp</span><span class="p">)</span>
+          <span class="p">(</span><span class="nf">core/commit!</span><span class="p">))))))</span>
+</code></pre>
+<p>This task only considers one file (the first <code>.scss</code> files that does not start with an underscore). When using Sass, files whose name start with an underscore are files that are included in another stylesheet (<code>src/scss/main.scss</code> handles all the includes in my case), so we do not need to consider them separately.</p>
+<p>To make the task find the Sass sources, we need to add the relevant directory to the <code>:source-paths</code> key in the Boot environment:</p>
+<pre><code class="highlight"><span></span><span class="c1">; This is one of the first lines in the build.boot file</span>
+<span class="p">(</span><span class="nf">set-env!</span> <span class="ss">:source-paths</span> <span class="o">#</span><span class="p">{</span><span class="s">"src/cljs"</span> <span class="s">"src/scss"</span><span class="p">}</span> <span class="nv">...</span>
+</code></pre>
+<p>And to integrate our task into the Boot build chain, we'll add it to the pre-defined <code>build</code> task that is part of the Tenzing template:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">deftask</span> <span class="nv">build</span> <span class="p">[]</span>
+  <span class="p">(</span><span class="nb">comp </span><span class="p">(</span><span class="nf">speak</span><span class="p">)</span>
+        <span class="p">(</span><span class="nf">sass</span><span class="p">)</span>
+        <span class="p">(</span><span class="nf">cljs</span><span class="p">)))</span>
+</code></pre>
+<p>Boot being awesome, we get things like file change watching for the Sass files automatically.</p>
+<p>We can verify that everything works, both for development and production use:</p>
+<pre><code class="highlight"><span></span>§&gt; boot dev  
+<span class="c1"># Development site running on http://localhost:3000</span>
+§&gt; boot build
+$&gt; <span class="nb">cd</span> target <span class="o">&amp;&amp;</span> python -m SimpleHTTPServer
+<span class="c1"># Production site running on http://localhost:8000</span>
+</code></pre>
+<h3><a href="#wrap-up" id="wrap-up"></a>Wrap-up</h3>
+<p>We now have a pretty nice setup to start working on the application itself. Sources are <a href="https://github.com/jstaffans/freq-words">available on Github</a>. Stay tuned for the next installment in the series!</p>
+</div><div><a href="/">Back</a></div></div></div><div class="footer"><p>&copy; 2015-2017 Johannes Staffans</p></div></div></html>
