@@ -26,7 +26,10 @@
      [:div "personal website and blog of"]
      [:h1.header__headline [:a {:href "/"} "Johannes Staffans"]]]
     [:div.sm-col.flex-column
-     [:a {:href "/pages/about.html"} "about"]
+     [:div
+      [:a {:href "/"} "posts"]
+      [:span " &middot; "]
+      [:a {:href "/pages/about.html"} "about"]]
      [:div.pt1 "elsewhere"]
      [:div
       [:a {:href "https://github.com/jstaffans"} "github"]
