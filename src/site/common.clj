@@ -1,7 +1,8 @@
 (ns site.common
   (:require [clj-time.core :as t]
             [clj-time.coerce :as coerce]
-            [clj-time.format :as fmt]))
+            [clj-time.format :as fmt]
+            [clj-time.local :as local]))
 
 (defn head
   ([] (head nil))
@@ -40,6 +41,11 @@
     [:svg.right.border-triangle {:xmlns "http://www.w3.org/2000/svg" :version "1.1"}
      [:polygon.mask {:points "0,0 30,0 30,30 0,30"}]
      [:polygon {:points "30,15 0,30 0,0"}]]]])
+
+(defn footer
+  []
+  [:div.footer
+   [:p (str "&copy; 2015-" (fmt/unparse (fmt/formatter "YYYY") (t/now)) " Johannes Staffans")]])
 
 (defn post-date
   [entry]

@@ -105,3 +105,14 @@ p > code, strong > code {
 img {
   max-width: $width;
 }
+
+.footer {
+  border-top: 1px solid $grey-dark;
+  padding: 5px 32px;
+
+  p {
+    font-size: 0.75rem;
+    max-width: $width;
+    margin: 0 auto;
+  }
+}

@@ -1,7 +1,7 @@
 (ns site.core
-  (:require [hiccup.page :as hp]
-            [clojure.string :refer [split-lines]]
-            [site.common :refer [head header post-date]]))
+  (:require [clojure.string :refer [split-lines]]
+            [hiccup.page :as hp]
+            [site.common :refer [head header footer post-date]]))
 
 (defn trace
   [x]
@@ -15,7 +15,8 @@
    [:div
     (header)
     [:div.container
-     content]]))
+     content]
+    (footer)]))
 
 (defn- teaser
   [entry]
