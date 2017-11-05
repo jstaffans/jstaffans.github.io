@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"><meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"><meta content="Johannes Staffans" itemprop="author" name="author"><title>Johannes Staffans - Learn to read with ClojureScript, part 2</title><link href="https://fonts.googleapis.com/css?family=Merriweather:400,700|Open+Sans:400,700" rel="stylesheet"><link href="/styles/main.css" rel="stylesheet" type="text/css"></head><div><div class="header"><div class="header__content clearfix"><div class="sm-col sm-col-8"><div>personal website and blog of</div><h1 class="header__headline"><a href="/">Johannes Staffans</a></h1></div><div class="sm-col flex-column"><div><a href="/">posts</a><span> &middot; </span><a href="/pages/about.html">about</a></div><div class="pt1">elsewhere</div><div><a href="https://github.com/jstaffans">github</a><span> &middot; </span><a href="https://www.linkedin.com/in/jstaffans">linkedin</a><span> &middot; </span><a href="https://twitter.com/jstaffans">@jstaffans</a></div></div></div><div class="clearfix"><svg class="left border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="0,15 30,0 30,30"></polygon></svg><svg class="right border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="30,15 0,30 0,0"></polygon></svg></div></div><div class="container"><div><div class="flex items-baseline justify-between"><h2>Learn to read with ClojureScript, part 2</h2><div><span>06.03.2016</span></div></div><div><p>Almost a year ago, I <a href="http://jstaffans.github.io/2015/05/25/freq-words.html">wrote about implementing a learning aid for children in elementary school using ClojureScript</a>. I finally got around to finishing this project now and decided to write a few words about the experience.</p>
+<p>For the first iteration, I had decided to use Boot, mostly due to the simpler integration of things like SASS compilation into the development workflow. I didn't get very far with the first version of the application until it got put on the back burner, but a few weeks ago, I decided I should really finish the project and save all those children from having to look at my Flash application from 2007.</p>
+<p>The project was still on a year-old version of ClojureScript (ancient in ClojureScript terms!) and an old version of Boot. When I tried to fire the app up, nothing worked!</p>
+<pre><code>clojure.lang.Compiler$CompilerException: java.lang.RuntimeException:
+  No such var: cljs.repl/IParseError, compiling:(cemerick/piggieback.clj:89:1)
+  java.lang.RuntimeException: No such var: cljs.repl/IParseError
+</code></pre>
+<p>I tried looking over some more recent Boot/Reagent examples to learn what I should be doing, but couldn't really figure anything out. Giving up, I started a new project from scratch using Leiningen and Figwheel, using the <a href="https://github.com/gadfly361/reagent-figwheel">reagent-figwheel template</a>. Oh the joy of greenfields development!</p>
+<h3><a href="#re-frame" id="re-frame"></a>Re-frame</h3>
+<p>For the new version, I decided to try out <a href="https://github.com/Day8/re-frame">re-frame</a>, an Elm-inspired, FRP-ish framework for Reagent applications. Working within the confines of a well-defined framework turned out to be a big win for me. I agree with Malcolm Sparks about the <a href="https://skillsmatter.com/skillscasts/6718-introduction-to-clojurescript-reagent-and-reframe">advantage of having a box to put your stuff into</a> when you're getting used to developing in a new environment — for me, in this case, frontend development with Reagent. You should watch that talk, it's pretty good!</p>
+<p>Of course, re-frame is no magic bullet. I put a lot of thought into for example what my state model should look like. In the end, I found it best to keep only the things that really change in the app state atom and derive the rest from that. As an example, the application I built has a number of groups of words that the user can select for practice:</p>
+<pre><code class="highlight"><span></span>  <span class="p">[[</span><span class="s">"att"</span>, <span class="s">"den"</span>, <span class="s">"ett"</span>, <span class="s">" där"</span>, <span class="s">"fin"</span>, <span class="s">"han"</span> <span class="nv">...</span><span class="p">]</span>
+   <span class="p">[</span><span class="s">"mitt"</span>, <span class="s">"in"</span>, <span class="s">"kom"</span>, <span class="s">"dem"</span>, <span class="s">"mig"</span>, <span class="s">"dig"</span> <span class="nv">...</span><span class="p">]</span>
+   <span class="nv">...</span><span class="p">]</span>
+</code></pre>
+<p>To keep track of the current words to show, I could have put the entire word array into the app state and pushed the currently selected group via a subscription to the view component. But as the actual words constitute just static data, I instead just pushed a <code>:current-group</code> key to the view and let the view component do a lookup of the actual words to show based on that. Re-frame stresses to keep view components dumb; I think a a simple lookup is dumb enough!</p>
+<h3><a href="#figwheel" id="figwheel"></a>Figwheel</h3>
+<p>I had some problems with Figwheel reloading at first. I used <a href="https://github.com/gf3/secretary">secretary</a> for routing, and whereas the root page reloads fine, reloading while on a route (<code>/#/group/4</code> for example) would result in a blank page. I could fix that by removing the Fighweel reloading configuration from the Leiningen project file and putting it in a <code>dev</code> namespace instead — it turns out that you shouldn't let Figwheel reset the whole app, just re-mount the root node.</p>
+<p>The <code>core</code> namespace has a function that performs initialisation of the app and mounts the root node:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">mount-root</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">reagent/render</span> <span class="p">[</span><span class="nv">freq-words-2.views/app</span><span class="p">]</span> <span class="p">(</span><span class="nf">.getElementById</span> <span class="nv">js/document</span> <span class="s">"app"</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="o">^</span><span class="ss">:export</span> <span class="nv">main</span> <span class="p">[]</span>
+  <span class="p">(</span><span class="nf">dispatch</span> <span class="p">[</span><span class="ss">:initialise-db</span><span class="p">])</span>
+  <span class="p">(</span><span class="nf">routes/init</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">mount-root</span><span class="p">))</span>
+</code></pre>
+<p>The project file had this setting:</p>
+<pre><code class="highlight"><span></span><span class="c1">;; project.clj:</span>
+
+<span class="c1">;; reload whole app: causes blank pages when reloading route</span>
+<span class="ss">:figwheel</span> <span class="p">{</span><span class="ss">:on-jsload</span> <span class="s">"freq-words-2.core/main"</span><span class="p">}</span>
+</code></pre>
+<p>The replacement for the above:</p>
+<pre><code class="highlight"><span></span><span class="c1">;; dev.cljs:</span>
+
+<span class="c1">;; only re-mount root on reload</span>
+<span class="p">(</span><span class="nf">figwheel/watch-and-reload</span>
+   <span class="ss">:websocket-url</span> <span class="s">"ws://localhost:3449/figwheel-ws"</span>
+   <span class="ss">:jsload-callback</span> <span class="nv">mount-root</span><span class="p">)</span>
+</code></pre>
+<p>Check out the [sources] <a href="https://github.com/jstaffans/freq-words-2">9</a> to see the whole setup.</p>
+<h3><a href="#devtools-repl" id="devtools-repl"></a>Devtools, REPL</h3>
+<p>Another gem that I discovered during the development of this application was <a href="https://github.com/binaryage/cljs-devtools">cljs-devtools</a>. It's extremely helpful for logging ClojureScript values to the Chrome console. I enable it in the <code>dev</code> namespace, so it's only available during development:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">devtools/enable-feature!</span> <span class="ss">:sanity-hints</span> <span class="ss">:dirac</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">devtools/install!</span><span class="p">)</span>
+</code></pre>
+<p>I didn't use the ClojureScript REPL much — Figwheel reloading and cljs-devtools were enough for a smooth development experience. The rare occasions when I put the REPL to use were mostly for <a href="https://github.com/Day8/re-frame/wiki/FAQ#5-how-can-i-inspect-app-db">inspecting and interacting with the app state directly</a>.</p>
+<h3><a href="#conclusion" id="conclusion"></a>Conclusion</h3>
+<p>Leiningen, Figwheel and re-frame brought stability and sanity to my frontend development undertakings. Hats off to all the people who have brought the ClojureScript ecosystem and development experience to where we are now!</p>
+<p>You can see the live application <a href="http://www.kjellstaffans.fi/ord/">here</a>. Sources are on <a href="https://github.com/jstaffans/freq-words-2">Github</a>.</p>
+</div><div><a href="/">Back</a></div></div></div><div class="footer"><p>&copy; 2015-2017 Johannes Staffans</p></div></div></html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"><meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"><meta content="Johannes Staffans" itemprop="author" name="author"><title>Johannes Staffans - Fun with Specter</title><link href="https://fonts.googleapis.com/css?family=Merriweather:400,700|Open+Sans:400,700" rel="stylesheet"><link href="/styles/main.css" rel="stylesheet" type="text/css"></head><div><div class="header"><div class="header__content clearfix"><div class="sm-col sm-col-8"><div>personal website and blog of</div><h1 class="header__headline"><a href="/">Johannes Staffans</a></h1></div><div class="sm-col flex-column"><div><a href="/">posts</a><span> &middot; </span><a href="/pages/about.html">about</a></div><div class="pt1">elsewhere</div><div><a href="https://github.com/jstaffans">github</a><span> &middot; </span><a href="https://www.linkedin.com/in/jstaffans">linkedin</a><span> &middot; </span><a href="https://twitter.com/jstaffans">@jstaffans</a></div></div></div><div class="clearfix"><svg class="left border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="0,15 30,0 30,30"></polygon></svg><svg class="right border-triangle" version="1.1" xmlns="http://www.w3.org/2000/svg"><polygon class="mask" points="0,0 30,0 30,30 0,30"></polygon><polygon points="30,15 0,30 0,0"></polygon></svg></div></div><div class="container"><div><div class="flex items-baseline justify-between"><h2>Fun with Specter</h2><div><span>19.11.2015</span></div></div><div><p><a href="https://github.com/nathanmarz/specter">Specter</a> is a new library by Nathan Marz that makes it easier to deal with nested data structures, such as lists of maps of maps. This post explores some less-documented parts of the library.</p>
+<p>For this post, we'll be dealing with a simple movie dataset:</p>
+<pre><code class="highlight"><span></span><span class="p">[{</span><span class="ss">:name</span> <span class="s">"First Blood"</span>, <span class="ss">:director</span> <span class="s">"Ted Kotcheff"</span>, <span class="ss">:rating</span> <span class="mf">7.6</span><span class="p">}</span>
+ <span class="p">{</span><span class="ss">:name</span> <span class="s">"Lethal Weapon 3"</span>, <span class="ss">:director</span> <span class="s">"Richard Donner"</span>, <span class="ss">:rating</span> <span class="mf">6.6</span><span class="p">}</span>
+ <span class="p">{</span><span class="ss">:name</span> <span class="s">"Predator"</span>, <span class="ss">:director</span> <span class="s">"John McTiernan"</span>, <span class="ss">:rating</span> <span class="mf">7.8</span><span class="p">}</span>
+ <span class="p">{</span><span class="ss">:name</span> <span class="s">"Mad Max Beyond Thunderdome"</span>, <span class="ss">:director</span> <span class="s">"George Miller"</span>, <span class="ss">:rating</span> <span class="mf">6.1</span><span class="p">}</span>
+ <span class="p">{</span><span class="ss">:name</span> <span class="s">"The Terminator"</span>, <span class="ss">:director</span> <span class="s">"James Cameron"</span>, <span class="ss">:rating</span> <span class="mf">8.1</span><span class="p">}</span>
+ <span class="nv">...</span> <span class="p">]</span>
+</code></pre>
+<p>Transforming the sequence is simple enough:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">require</span> <span class="o">'</span><span class="p">[</span><span class="nv">com.rpl.specter</span> <span class="ss">:as</span> <span class="nv">s</span><span class="p">])</span>
+<span class="nv">=&gt;</span> <span class="nv">nil</span>
+<span class="p">(</span><span class="nf">s/transform</span> <span class="p">[</span><span class="nv">s/ALL</span> <span class="ss">:name</span><span class="p">]</span> <span class="nv">clojure.string/upper-case</span> <span class="nv">movies</span><span class="p">)</span>
+<span class="nv">=&gt;</span> <span class="p">[{</span><span class="ss">:name</span> <span class="s">"FIRST BLOOD"</span>, <span class="ss">:director</span> <span class="s">"Ted Kotcheff"</span>, <span class="ss">:rating</span> <span class="mf">7.6</span><span class="p">}</span>, <span class="nv">...</span> <span class="p">]</span>
+</code></pre>
+<p>In general, transformation is Specter's forte and is covered very well by the <a href="https://github.com/nathanmarz/specter">documentation</a>. I was however interested in exploiting Specter for doing analysis and aggregation of data stored in a sequence of nested maps. It is possible to do so with standard Clojure functions, but I like the declarativeness of Specter and wanted to give it a shot.</p>
+<p>Let's for example find all movies by James Cameron with a rating higher than 8.0:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">s/select</span> 
+  <span class="p">[</span><span class="nv">s/ALL</span> 
+   <span class="p">(</span><span class="nf">s/cond-path</span> 
+     <span class="p">[</span><span class="ss">:director</span> <span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="s">"James Cameron"</span> <span class="nv">%</span><span class="p">)]</span> 
+     <span class="p">[</span><span class="ss">:rating</span> <span class="o">#</span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">%</span> <span class="mf">8.0</span><span class="p">)])]</span> 
+  <span class="nv">movies</span><span class="p">)</span>
+<span class="nv">=&gt;</span> <span class="p">[</span><span class="mf">8.1</span> <span class="mf">8.5</span> <span class="mf">8.6</span><span class="p">]</span>
+</code></pre>
+<p><strong>(Note: Nathan Marz let me know via Twitter that there's a better to do the following, more on that at the end of the post!)</strong></p>
+<p>So we get the ratings and they are all greater than 8.0, but we have lost the original maps. How do we get those? It turns out that you can reference the <code>VAL</code> symbol basically anywhere within the selector path. This resolves to whatever value is selected by Specter at this level of nesting. If we example put <code>VAL</code> at the end, we duplicate the rating:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">s/select</span> 
+  <span class="p">[</span><span class="nv">s/ALL</span> 
+   <span class="p">(</span><span class="nf">s/cond-path</span> 
+     <span class="p">[</span><span class="ss">:director</span> <span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="s">"James Cameron"</span> <span class="nv">%</span><span class="p">)]</span> 
+     <span class="p">[</span><span class="ss">:rating</span> <span class="o">#</span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">%</span> <span class="mf">8.0</span><span class="p">)</span> <span class="nv">s/VAL</span><span class="p">])]</span> 
+  <span class="nv">movies</span><span class="p">)</span>
+<span class="nv">=&gt;</span> <span class="p">[[</span><span class="mf">8.1</span> <span class="mf">8.1</span><span class="p">]</span> <span class="p">[</span><span class="mf">8.5</span> <span class="mf">8.5</span><span class="p">]</span> <span class="p">[</span><span class="mf">8.6</span> <span class="mf">8.6</span><span class="p">]]</span>
+</code></pre>
+<p>When working with sequences of maps, it's usually the case that we want to get the whole map back, so we should put <code>VAL</code> at the beginning of the selector path:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">s/select</span> 
+  <span class="p">[</span><span class="nv">s/ALL</span> 
+   <span class="nv">s/VAL</span>
+   <span class="p">(</span><span class="nf">s/cond-path</span> 
+     <span class="p">[</span><span class="ss">:director</span> <span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="s">"James Cameron"</span> <span class="nv">%</span><span class="p">)]</span> 
+     <span class="p">[</span><span class="ss">:rating</span> <span class="o">#</span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">%</span> <span class="mf">8.0</span><span class="p">)])]</span> 
+  <span class="nv">movies</span><span class="p">)</span>
+<span class="nv">=&gt;</span> <span class="p">[[{</span><span class="ss">:name</span> <span class="s">"The Terminator"</span>, <span class="ss">:director</span> <span class="s">"James Cameron"</span>, <span class="ss">:rating</span> <span class="mf">8.1</span><span class="p">}</span> <span class="mf">8.1</span><span class="p">]</span> <span class="nv">...</span> <span class="p">]</span>
+</code></pre>
+<p>Now we get the full map back, but it's wrapped in a collection. We can introduce a helper function for this use case:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">select-maps</span> 
+  <span class="p">[</span><span class="nv">selector</span> <span class="nv">structure</span><span class="p">]</span>
+    <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">s/select</span> <span class="nv">selector</span> <span class="nv">structure</span><span class="p">)</span>
+         <span class="c1">; the map we're after is always the first argument</span>
+         <span class="p">(</span><span class="nf">mapv</span> <span class="p">(</span><span class="k">fn </span><span class="p">[[</span><span class="nv">m</span> <span class="o">&amp;</span> <span class="nv">_</span><span class="p">]]</span> <span class="nv">m</span><span class="p">))))</span>    
+</code></pre>
+<p>Now working with sequences of maps is more comfortable:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">select-maps</span>
+  <span class="p">[</span><span class="nv">s/ALL</span> 
+   <span class="nv">s/VAL</span>
+   <span class="p">(</span><span class="nf">s/cond-path</span> 
+     <span class="p">[</span><span class="ss">:director</span> <span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="s">"James Cameron"</span> <span class="nv">%</span><span class="p">)]</span> 
+     <span class="p">[</span><span class="ss">:rating</span> <span class="o">#</span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">%</span> <span class="mf">8.0</span><span class="p">)])]</span> 
+  <span class="nv">movies</span><span class="p">)</span>
+<span class="nv">=&gt;</span> <span class="p">[{</span><span class="ss">:name</span> <span class="s">"The Terminator"</span>, <span class="ss">:director</span> <span class="s">"James Cameron"</span>, <span class="ss">:rating</span> <span class="mf">8.1</span><span class="p">}</span> <span class="nv">...</span> <span class="p">]</span>
+</code></pre>
+<p>Specter's path definition functions can be exploited to get e.g. movies of James Cameron that have an either very bad or very good rating:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">select-maps</span>
+  <span class="p">[</span><span class="nv">s/ALL</span> 
+   <span class="nv">s/VAL</span>
+   <span class="p">(</span><span class="nf">s/cond-path</span> <span class="p">[</span><span class="ss">:director</span> <span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="s">"James Cameron"</span> <span class="nv">%</span><span class="p">)]</span>
+     <span class="p">(</span><span class="nf">s/multi-path</span> <span class="p">[</span><span class="ss">:rating</span> <span class="o">#</span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">%</span> <span class="mf">8.5</span><span class="p">)]</span> <span class="p">[</span><span class="ss">:rating</span> <span class="o">#</span><span class="p">(</span><span class="nb">&lt; </span><span class="nv">%</span> <span class="mf">6.0</span><span class="p">)]))]</span> 
+  <span class="nv">movies</span><span class="p">)</span>
+<span class="nv">=&gt;</span>
+<span class="p">[{</span><span class="ss">:name</span> <span class="s">"Terminator 3: Judgment Day"</span>, 
+  <span class="ss">:director</span> <span class="s">"James Cameron"</span>, <span class="ss">:rating</span> <span class="mf">8.6</span><span class="p">}</span>
+ <span class="p">{</span><span class="ss">:name</span> <span class="s">"Piranhas II"</span>, <span class="ss">:director</span> <span class="s">"James Cameron"</span>, <span class="ss">:rating</span> <span class="mf">3.5</span><span class="p">}]</span>
+</code></pre>
+<p>So this works, but it's clunky and requires a helper function. Is there an easier way?</p>
+<h4><a href="#the-right-way" id="the-right-way"></a>The right way</h4>
+<p>As pointed out to me by the library author, there's a much better way of accomplishing the above:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">s/select</span> 
+  <span class="p">[</span><span class="nv">s/ALL</span>
+   <span class="p">(</span><span class="nf">s/selected?</span> <span class="ss">:director</span> <span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="s">"James Cameron"</span> <span class="nv">%</span><span class="p">))</span>
+   <span class="p">(</span><span class="nf">s/selected?</span> <span class="ss">:rating</span> <span class="o">#</span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">%</span> <span class="mf">8.0</span><span class="p">))]</span>
+  <span class="nv">movies</span><span class="p">)</span>
+</code></pre>
+<p>The <code>selected?</code> function filters the current value based on whether the selector that follows matches anything. It doesn't mess up the return value like the other examples above. It can of course be combined with conditional paths or multipaths as in the previous example:</p>
+<pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">s/select</span> 
+  <span class="p">[</span><span class="nv">s/ALL</span>
+   <span class="p">(</span><span class="nf">s/selected?</span> <span class="ss">:director</span> <span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="s">"James Cameron"</span> <span class="nv">%</span><span class="p">))</span>
+   <span class="p">(</span><span class="nf">s/selected?</span> <span class="p">(</span><span class="nf">s/multi-path</span> <span class="p">[</span><span class="ss">:rating</span> <span class="o">#</span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">%</span> <span class="mf">8.0</span><span class="p">)]</span> <span class="p">[</span><span class="ss">:rating</span> <span class="o">#</span><span class="p">(</span><span class="nb">&lt; </span><span class="nv">%</span> <span class="mf">6.0</span><span class="p">)]))]</span>
+  <span class="nv">movies</span><span class="p">)</span>
+</code></pre>
+<h4><a href="#conclusion" id="conclusion"></a>Conclusion</h4>
+<p>I think Specter is one of the best things to come out of the Clojure ecosystem recently. I find it a lot easier to grasp how to use Specter than for example zippers, which is another popular way of working with nested data structures. It's still a bit dense to get into, though — Specter would benefit greatly from something like the <a href="http://www.learndatalogtoday.org/">Learn Datalog Today</a> website!</p>
+</div><div><a href="/">Back</a></div></div></div><div class="footer"><p>&copy; 2015-2017 Johannes Staffans</p></div></div></html>
