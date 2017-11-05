@@ -60,7 +60,7 @@ detailed information about the state of the implementation:
 
 An example of a handover-friendly pull request would be:
 
-```markdown
+```
 Add password reminder functionality
 ===================================
 

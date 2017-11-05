@@ -20,6 +20,7 @@
 
 (def highlight-deps
   '[[org.clojure/tools.namespace "0.3.0-alpha3"]
+    [enlive "1.1.5"]
     [clygments "1.0.0"]])
 
 (def highlight-defaults
@@ -32,7 +33,7 @@
   (let [pod     (create-pod highlight-deps)
         options (merge highlight-defaults *opts*)]
     (p/content-task
-     {:render-form-fn (fn [data] `(identity ~data))
+     {:render-form-fn (fn [data] `(tech.jstaffans.highlight/highlight-code-blocks ~data))
       :paths-fn #(p/content-paths % options)
       :passthru-fn p/content-passthru
       :task-name "highlight"
@@ -46,10 +47,10 @@
     (comp (sass)
        (sift :move {#"main.css" "public/styles/main.css"})
        (p/markdown)
-       (p/collection :renderer 'site.core/index :filterer post? :sortby :date)
-       (p/render :renderer 'site.core/post :filterer post?)
-       (p/render :renderer 'site.core/page :filterer page?)
-       (highlight :filterer page?))))
+       (highlight)
+       (p/collection :renderer 'tech.jstaffans.core/index :filterer post? :sortby :date)
+       (p/render :renderer 'tech.jstaffans.core/post :filterer post?)
+       (p/render :renderer 'tech.jstaffans.core/page :filterer page?))))
 
 
 (deftask dev

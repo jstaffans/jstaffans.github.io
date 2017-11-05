@@ -1,7 +1,7 @@
-(ns site.core
+(ns tech.jstaffans.core
   (:require [clojure.string :refer [split-lines]]
             [hiccup.page :as hp]
-            [site.common :refer [head header footer post-date]]))
+            [tech.jstaffans.common :refer [head header footer post-date]]))
 
 (defn trace
   [x]

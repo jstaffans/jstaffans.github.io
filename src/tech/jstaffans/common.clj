@@ -1,4 +1,4 @@
-(ns site.common
+(ns tech.jstaffans.common
   (:require [clj-time.core :as t]
             [clj-time.coerce :as coerce]
             [clj-time.format :as fmt]

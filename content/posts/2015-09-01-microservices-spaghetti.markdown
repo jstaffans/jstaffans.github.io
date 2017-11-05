@@ -33,7 +33,7 @@ a set of Protobuf message types or something else. The gateway layer is responsi
 failure, should let any clients know that a particular service is not available. HATEOAS is one way of accomplishing
 this, the gateway providing a service map as part of its API:
 
-```
+```json
 {
     "_links": [
         {

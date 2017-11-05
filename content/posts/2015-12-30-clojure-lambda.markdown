@@ -78,7 +78,7 @@ up using the [immuconf][4] library in combination with an S3 bucket. The bluepri
 for the configuration is a checked-in `resources/config.edn` file, which can be 
 overridden by both a file in an S3 bucket and a file that is available only locally:
 
-``` 
+```clojure
 (ns lambda-example.config
   (:require [clojure.java.io :as io]
             [amazonica.aws.s3 :refer [get-object]]
