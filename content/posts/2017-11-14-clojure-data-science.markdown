@@ -14,7 +14,8 @@ programming made popular for data science by IPython notebooks.
 The data set I picked is a customer satisfaction survey for a youth services bureau.
 Feedback is collected via a terminal with four buttons, ranging from a sad smiley to 
 a happy one. The question asked is "how happy are with the services of the youth services 
-bureau today"? 
+bureau today"? The question **I** ask is whether customer happiness depends on the 
+time of the day. 
 
 Gorilla REPL comes with a handy online viewer (although it'd be even handier
 if Github would support Gorilla REPL notebooks natively, as it does IPython and
