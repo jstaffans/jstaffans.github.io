@@ -1,8 +1,9 @@
 ---
-layout: post
 title:  "Mob programming"
-date:   2017-02-15
+date-published:   2017-02-15
 tags:   [team, engineering, agile]
+author: Johannes Staffans
+uuid:   abcc8b46-f711-4191-9c40-39c868c17c32
 ---
 
 Last week, my team and I had the need to re-focus our priorities and put our joint efforts

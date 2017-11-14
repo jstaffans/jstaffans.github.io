@@ -1,8 +1,10 @@
 ---
 layout: post
 title:  "Stop the microservice spaghetti"
-date:   2015-09-01
-tags:   devops, microservices
+date-published:   2015-09-01
+tags:   [devops, microservices]
+author: Johannes Staffans
+uuid:   efe7d49f-3bef-4375-94be-e660dd4a1be3
 ---
 
 When moving from a monolithic architecture to microservices, you immediately appreciate the agility

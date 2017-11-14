@@ -43,15 +43,20 @@
 (deftask build
   []
   (let [post? (fn [{:keys [path]}] (.startsWith path "public/posts"))
-        page? (fn [{:keys [path]}] (.startsWith path "public/pages"))]
+        page? (fn [{:keys [path]}] (.startsWith path "public/pages"))
+        clojure-post? (fn [{:keys [tags] :as entry}]
+                        (and (post? entry) (some #{"clojure"} tags)))]
     (comp (sass)
        (sift :move {#"main.css" "public/styles/main.css"})
+       (p/global-metadata)
        (p/markdown)
        (highlight)
        (p/collection :renderer 'tech.jstaffans.core/index :filterer post? :sortby :date)
        (p/render :renderer 'tech.jstaffans.core/post :filterer post?)
-       (p/render :renderer 'tech.jstaffans.core/page :filterer page?))))
-
+       (p/render :renderer 'tech.jstaffans.core/page :filterer page?)
+       (p/atom-feed :filterer post?)
+       (p/atom-feed :filename "feed_clojure.xml" :filterer clojure-post?)
+       (p/rss :filterer post?))))
 
 (deftask dev
   []

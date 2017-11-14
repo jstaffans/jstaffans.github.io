@@ -1,8 +1,9 @@
 ---
-layout: post
-title:  "A whiff of data science in Clojure"
-date:   2017-11-14
-tags:   [data, science, clojure, gorilla, repl]
+title:          "A whiff of data science in Clojure"
+date-published: 2017-11-14
+tags:           [data, science, clojure, gorilla, repl]
+uuid:           21baeb20-e717-47ea-9309-9f7c15e42618
+author:         Johannes Staffans
 ---
 
 As part of learning more about applied statistics, I decided to trawl around

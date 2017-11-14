@@ -1,8 +1,10 @@
 ---
 layout: post
 title:  "A vertical microservice with Spring Boot"
-date:   2015-03-16
+date-published:   2015-03-16
 tags:   [java, spring, microservices]
+author: Johannes Staffans
+uuid:   f5ab79c6-3413-4fd3-a579-8c04228e2175
 ---
 
 At [komoot](https://www.komoot.de), we have lately been busy moving to a more microservice-oriented architecture. Many of our new features, such as the card feed

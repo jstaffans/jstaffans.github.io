@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Every-day machine learning"
-date:   2017-02-15
+date-published:   2017-02-15
 tags:   [machine learning, data]
 ---
 

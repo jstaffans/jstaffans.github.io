@@ -1,8 +1,9 @@
 ---
-layout: post
 title:  "freq-words: learn to read with ClojureScript"
-date:   2015-05-25
+date-published:   2015-05-25
 tags:   [clojurescript, reagent, boot]
+uuid:   94ce595a-3378-47b0-bb76-91991db0d618
+author: Johannes Staffans
 ---
 
 My father, a retired elementary school teacher, runs a [website](http://www.kjellstaffans.fi) 
