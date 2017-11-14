@@ -22,12 +22,12 @@ $&gt; boot dev
 <p>Cursive can now pick up the project's dependencies. I'll just have to remember to update both files if I add any third-party libraries.</p>
 <h4><a href="#my-first-boot-task-compiling-sass-files" id="my-first-boot-task-compiling-sass-files"></a>My first Boot task: compiling Sass files</h4>
 <p>I will base my layout on a free theme from Bootswatch, but will also most likely add some styles of my own. I think CSS gets tedious really fast so I prefer to use a higher-level language like Sass. Having downloaded the base theme as <code>src/scss/_bootstrap.scss</code>, I will add an <code>src/scss/main.scss</code> file as well where I include the base theme and can add any custom styles:</p>
-<pre><code class="highlight"><span></span><span class="k">@import</span> <span class="s">'bootstrap';</span>
+<pre><code class="highlight"><span></span><span class="k">@import</span> <span class="s1">'</span><span class="s2">bootstrap'</span><span class="p">;</span>
 
 <span class="c1">// a little custom style</span>
-<span class="nc">.my-form</span> <span class="err">{</span>
-  <span class="na">background</span><span class="o">:</span> <span class="nb">blue</span><span class="err">;</span>
-<span class="err">}</span>
+<span class="nc">.my-form</span> <span class="p">{</span>
+  <span class="nt">background</span><span class="nd">:</span> <span class="nt">blue</span><span class="o">;</span>
+<span class="p">}</span>
 </code></pre>
 <p>The challenge now is to add Sass compilation to the Boot build chain. A custom task does the trick (based on a conversation on the <a href="http://hoplon.discoursehosting.net/t/trying-to-create-a-boot-task-to-compile-sass-files/386">Hoplon mailing list</a>):</p>
 <pre><code class="highlight"><span></span><span class="p">(</span><span class="nf">deftask</span> <span class="nv">sass</span>
