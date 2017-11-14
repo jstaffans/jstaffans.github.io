@@ -72,7 +72,7 @@ use a higher-level language like Sass. Having downloaded the base theme as
 `src/scss/_bootstrap.scss`, I will add an `src/scss/main.scss` file as well
 where I include the base theme and can add any custom styles:
 
-```sass
+```scss
 
 @import 'bootstrap';
 
