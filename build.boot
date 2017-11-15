@@ -55,8 +55,7 @@
        (p/render :renderer 'tech.jstaffans.core/post :filterer post?)
        (p/render :renderer 'tech.jstaffans.core/page :filterer page?)
        (p/atom-feed :filterer post?)
-       (p/atom-feed :filename "feed_clojure.xml" :filterer clojure-post?)
-       (p/rss :filterer post?))))
+       (p/atom-feed :filename "feed_clojure.xml" :filterer clojure-post?))))
 
 (deftask dev
   []
