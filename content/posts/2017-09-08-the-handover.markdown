@@ -125,7 +125,7 @@ to us, and not surprisingly, we've come to see the handover as one of the most i
 the retrospective, and that some action will come out of it. 
 
 One technique that we've found useful at the start of new projects is 
-**[mob programming](http://jstaffans.github.io/2017/02/15/mob-programming.html)**. 
+**[mob programming](http://jstaffans.github.io/posts/2017-02-15-mob-programming.html)**. 
 By building out the foundations of the project in a group setting, knowledge silos can be 
 avoided from the get-go. It's also a great way of getting to know your team mates better —
 after all, you're going to rely on them heavily!
