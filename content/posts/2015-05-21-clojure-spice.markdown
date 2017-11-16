@@ -1,6 +1,6 @@
 ---
 title:  "Spicing up Java projects with Clojure"
-date-published:   2015-05-21
+date:   2015-05-21
 redirect_from: /clojure/java/2015/05/21/clojure-spice.html
 tags:   [clojure, java]
 author: Johannes Staffans

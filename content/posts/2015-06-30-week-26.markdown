@@ -1,6 +1,6 @@
 ---
 title:  "Week 26"
-date-published:   2015-06-30
+date:   2015-06-30
 tags:   [braindump]
 uuid:   d7699272-d914-4079-83ab-eb1ddb2723ab
 author: Johannes Staffans

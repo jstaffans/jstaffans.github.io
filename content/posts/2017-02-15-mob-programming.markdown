@@ -1,6 +1,6 @@
 ---
 title:  "Mob programming"
-date-published:   2017-02-15
+date:   2017-02-15
 tags:   [team, engineering, agile]
 author: Johannes Staffans
 uuid:   abcc8b46-f711-4191-9c40-39c868c17c32

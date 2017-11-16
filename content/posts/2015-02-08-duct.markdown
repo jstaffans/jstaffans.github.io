@@ -1,6 +1,6 @@
 ---
 title:  "Taking duct for a spin"
-date-published:   2015-02-08
+date:   2015-02-08
 tags:   [clojure, microservices]
 uuid:   61f7d274-aee4-40f2-a269-3a0656bc2764
 author: Johannes Staffans

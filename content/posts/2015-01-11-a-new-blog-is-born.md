@@ -1,6 +1,6 @@
 ---
 title:  "A new blog is born"
-date-published:   2015-01-11
+date:   2015-01-11
 tags:   [blog, about]
 uuid:   8c6519b4-ffe0-4ca8-9a9b-b0ca203cd1fc
 author: Johannes Staffans

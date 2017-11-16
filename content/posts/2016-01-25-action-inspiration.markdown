@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Action leads to inspiration"
-date-published:   2016-01-25
+date:   2016-01-25
 tags:   [software development, getting started, advice, clojurebridge, clojure]
 author: Johannes Staffans
 uuid:   cdaae8c8-78a6-4e3b-9749-7333c4381482

@@ -1,6 +1,6 @@
 ---
 title:  Learn to read with ClojureScript, part 2
-date-published:   2016-03-06
+date:   2016-03-06
 tags:   [clojurescript, reagent, re-frame, boot, figwheel]
 author: Johannes Staffans
 uuid:   3fbed48d-2bd8-4fb8-8470-73d658ea2b22

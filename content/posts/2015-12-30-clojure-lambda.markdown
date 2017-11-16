@@ -1,6 +1,6 @@
 ---
 title:  "A look at running Clojure on AWS Lambda"
-date-published:   2015-12-30
+date:   2015-12-30
 tags:   [clojure, lambda, aws]
 author: Johannes Staffans
 uuid:   eb792ad5-e2cb-465f-b9b0-be0627cb9cb6
