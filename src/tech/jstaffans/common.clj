@@ -52,5 +52,5 @@
 
 (defn post-date
   [entry]
-  (let [d (coerce/from-date (:date entry))]
+  (let [d (coerce/from-date (:date-published entry))]
     [:span (fmt/unparse (fmt/formatter "dd.MM.YYYY") d)]))

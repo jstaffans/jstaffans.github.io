@@ -51,7 +51,7 @@
        (p/global-metadata)
        (p/markdown)
        (highlight)
-       (p/collection :renderer 'tech.jstaffans.core/index :filterer post? :sortby :date)
+       (p/collection :renderer 'tech.jstaffans.core/index :filterer post? :sortby :date-published)
        (p/render :renderer 'tech.jstaffans.core/post :filterer post?)
        (p/render :renderer 'tech.jstaffans.core/page :filterer page?)
        (p/atom-feed :filterer post?)

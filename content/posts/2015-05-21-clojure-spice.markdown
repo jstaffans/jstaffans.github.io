@@ -1,10 +1,10 @@
 ---
-title:  "Spicing up Java projects with Clojure"
-date:   2015-05-21
-redirect_from: /clojure/java/2015/05/21/clojure-spice.html
-tags:   [clojure, java]
-author: Johannes Staffans
-uuid:   738cd775-b94a-4931-b111-e434a4059cc1
+title:          "Spicing up Java projects with Clojure"
+date-published: 2015-05-21
+redirect_from:  /clojure/java/2015/05/21/clojure-spice.html
+tags:           [clojure, java]
+author:         Johannes Staffans
+uuid:           738cd775-b94a-4931-b111-e434a4059cc1
 ---
 
 Many engineers with an interest in Clojure are probably working on Java code bases for most of the day. 

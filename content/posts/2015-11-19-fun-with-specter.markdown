@@ -1,9 +1,9 @@
 ---
-title:  "Fun with Specter"
-date:   2015-11-19
-tags:   [clojure, data structures, specter]
-author: Johannes Staffans
-uuid:   07ae01ec-82fb-418d-9e1f-53040dae2424
+title:          "Fun with Specter"
+date-published: 2015-11-19
+tags:           [clojure, data structures, specter]
+author:         Johannes Staffans
+uuid:           07ae01ec-82fb-418d-9e1f-53040dae2424
 ---
 
 [Specter][1] is a new library by Nathan Marz that makes it easier to deal with

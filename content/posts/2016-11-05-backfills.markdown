@@ -1,10 +1,9 @@
 ---
-layout: post
-title:  "Event stream processing: backfills"
-date:   2016-11-05
-tags:   [streams, stream processing, kinesis, events]
-author: Johannes Staffans
-uuid:   74f22045-a456-43fd-b638-734c3dd30d6d
+title:          "Event stream processing: backfills"
+date-published: 2016-11-05
+tags:           [streams, stream processing, kinesis, events]
+author:         Johannes Staffans
+uuid:           74f22045-a456-43fd-b638-734c3dd30d6d
 ---
 
 During the last months I have been involved in developing an event processing pipeline based on Amazon Kinesis. This post is about different strategies for replaying or **backfilling** events, to make up for lost events or a buggy stream worker implementation.

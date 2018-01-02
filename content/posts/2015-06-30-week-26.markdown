@@ -1,9 +1,9 @@
 ---
-title:  "Week 26"
-date:   2015-06-30
-tags:   [braindump]
-uuid:   d7699272-d914-4079-83ab-eb1ddb2723ab
-author: Johannes Staffans
+title:          "Week 26"
+date-published: 2015-06-30
+tags:           [braindump]
+uuid:           d7699272-d914-4079-83ab-eb1ddb2723ab
+author:         Johannes Staffans
 ---
 
 Some random things I've been thinking about this week:

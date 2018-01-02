@@ -1,9 +1,9 @@
 ---
-title:  Learn to read with ClojureScript, part 2
-date:   2016-03-06
-tags:   [clojurescript, reagent, re-frame, boot, figwheel]
-author: Johannes Staffans
-uuid:   3fbed48d-2bd8-4fb8-8470-73d658ea2b22
+title:          Learn to read with ClojureScript, part 2
+date-published: 2016-03-06
+tags:           [clojurescript, reagent, re-frame, boot, figwheel]
+author:         Johannes Staffans
+uuid:           3fbed48d-2bd8-4fb8-8470-73d658ea2b22
 ---
 
 Almost a year ago, I [wrote about implementing a learning aid for children in elementary school using ClojureScript][1].

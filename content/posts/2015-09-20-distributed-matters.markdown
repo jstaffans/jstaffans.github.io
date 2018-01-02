@@ -1,9 +1,9 @@
 ---
-title:  "Distributed Matters 2015"
-date:   2015-09-20
-tags:   [devops, distributed, conference, aws, redis, disque]
-author: Johannes Staffans
-uuid:   4ab445b8-7191-44f5-a67a-7233e51a3560
+title:          "Distributed Matters 2015"
+date-published: 2015-09-20
+tags:           [devops, distributed, conference, aws, redis, disque]
+author:         Johannes Staffans
+uuid:           4ab445b8-7191-44f5-a67a-7233e51a3560
 ---
 
 Yesterday, I had the pleasure of attending the Distributed Matters 2015 conference here in Berlin.

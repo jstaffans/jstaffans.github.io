@@ -1,9 +1,9 @@
 ---
-title:  "The handover"
-date:   2017-09-08
-tags:   [agile, teamwork, part-time teams]
-author: Johannes Staffans
-uuid:   7affbd65-5cb6-4e62-8f06-0ca42962f1a3
+title:          "The handover"
+date-published: 2017-09-08
+tags:           [agile, teamwork, part-time teams]
+author:         Johannes Staffans
+uuid:           7affbd65-5cb6-4e62-8f06-0ca42962f1a3
 ---
 
 The usual wisdom in software development is that a co-located team made up 

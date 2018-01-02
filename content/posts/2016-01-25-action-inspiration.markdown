@@ -1,10 +1,9 @@
 ---
-layout: post
-title:  "Action leads to inspiration"
-date:   2016-01-25
-tags:   [software development, getting started, advice, clojurebridge, clojure]
-author: Johannes Staffans
-uuid:   cdaae8c8-78a6-4e3b-9749-7333c4381482
+title:          "Action leads to inspiration"
+date-published: 2016-01-25
+tags:           [software development, getting started, advice, clojurebridge, clojure]
+author:         Johannes Staffans
+uuid:           cdaae8c8-78a6-4e3b-9749-7333c4381482
 ---
 
 Last weekend, a [ClojureBridge][1] event [took place in Berlin][2]. I was one of the coaches and had
