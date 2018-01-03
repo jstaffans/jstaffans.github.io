@@ -15,4 +15,4 @@
 <p>In the online backfilling scenario, there needs to be something that writes the events to the backfill Kinesis stream. I ended up writing around 20 lines of Python that gets the event backup archives from S3 for a given date range and sends them off to Kinesis in batches of a few hundred events each. Care needs to be taken not to exceed Kinesis write limits!</p>
 <h3><a href="#conclusion" id="conclusion"></a>Conclusion</h3>
 <p>It's important to have a strategy in mind for backfilling events in a stream processing pipeline. The day will inevitabely come when a bug or extended downtime makes it necessary to replay events. Making it easy to switch components over from the main stream to a separate backfill stream enables replays with the least amount of extra code.</p>
-</div><div><a href="/">Back</a></div></div></div><div class="footer"><p>&copy; 2015-2017 Johannes Staffans</p></div></div></html>
+</div><div><a href="/">Back</a></div></div></div><div class="footer"><p>&copy; 2015-2018 Johannes Staffans</p></div></div></html>
