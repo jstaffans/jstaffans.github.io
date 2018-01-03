@@ -1,9 +1,9 @@
 ---
-title:  "Why I'm excited about AWS Fargate"
-date:   2018-01-02
-tags:   [aws, devops, containers, docker]
-uuid:   32df7bf4-e980-4224-9954-988f487134c2
-author: Johannes Staffans
+title:          "Why I'm excited about AWS Fargate"
+date-published: 2018-01-02
+tags:           [aws, devops, containers, docker, ecs]
+uuid:           32df7bf4-e980-4224-9954-988f487134c2
+author:         Johannes Staffans
 ---
 
 Most of the systems I've worked on over the past several years have been deployed
